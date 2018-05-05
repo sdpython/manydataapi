@@ -5,5 +5,7 @@ moviepy
 pyensae
 pyquickhelper
 python-linkedin-v2
+sphinx
+sphinxjp.themes.basicstrap
 wheel
 
