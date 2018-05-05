@@ -47,7 +47,8 @@ from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_
 class TestNotebookVelibJCDecaux(unittest.TestCase):
 
     def setUp(self):
-        add_missing_development_version(["jyquickhelper", "pyquickhelper", "pyensae"], __file__, hide=True)
+        add_missing_development_version(
+            ["jyquickhelper", "pyquickhelper", "pyensae"], __file__, hide=True)
 
     def a_test_notebook_runner(self, name, folder, valid=None, copy_folder=None):
         temp = get_temp_folder(__file__, "temp_nb_velib_{0}".format(name))
