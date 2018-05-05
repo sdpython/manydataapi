@@ -5,3 +5,5 @@ moviepy
 pyensae
 pyquickhelper
 python-linkedin-v2
+wheel
+
