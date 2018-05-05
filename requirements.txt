@@ -1,0 +1,5 @@
+coverage
+jyquickhelper
+keyring
+pyquickhelper
+python-linkedin-v2
