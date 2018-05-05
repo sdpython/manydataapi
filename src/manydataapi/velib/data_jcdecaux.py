@@ -153,12 +153,8 @@ class DataCollectJCDecaux:
 
         return js
 
-    def collecting_data(self, contract,
-                        delayms=1000,
-                        outfile="velib_data.txt",
-                        single_file=True,
-                        stop_datetime=None,
-                        log_every=10,
+    def collecting_data(self, contract, delayms=1000, outfile="velib_data.txt",
+                        single_file=True, stop_datetime=None, log_every=10,
                         fLOG=print):
         """
         Collects data for a period of time.
@@ -198,9 +194,8 @@ class DataCollectJCDecaux:
 
             nb += 1
             if fLOG and nb % log_every == 0:
-                fLOG("DataVelib.collecting_data: ", nb, " times: ",
-                     now, " delay = ", delay, "next",
-                     cloc, " delays ", delays)
+                fLOG("DataCollectJCDecaux.collecting_data: nb={0} {1} delay={2}".format(
+                    nb, now, delay))
 
             while now < cloc:
                 now = datetime.datetime.now()
@@ -239,29 +234,8 @@ class DataCollectJCDecaux:
         if key is None:
             key = DataCollectJCDecaux.velib_get_key()
         velib = DataCollectJCDecaux(key, True)
-        velib.collecting_data(contract,
-                              delayms,
-                              folder_file,
-                              stop_datetime=stop_datetime,
-                              single_file=single_file,
-                              log_every=log_every,
-                              fLOG=fLOG)
-
-    @staticmethod
-    def velib_get_key():
-        """
-        Opens a windows to get a key (from a user) and a contract (city)
-        the function is independent from the others.
-
-        @return     key
-        """
-        from pyquickhelper import open_window_params
-        para = {"velib_key": ""}
-        para = open_window_params(
-            para,
-            DataCollectJCDecaux.__doc__,
-            "Velib Study")
-        return None if "__cancel__" in para else para["velib_key"]
+        velib.collecting_data(contract, delayms, folder_file, stop_datetime=stop_datetime,
+                              single_file=single_file, log_every=log_every, fLOG=fLOG)
 
     @staticmethod
     def to_df(folder, regex="velib_data.*[.]txt"):
@@ -500,7 +474,7 @@ class DataCollectJCDecaux:
                  iteration=500, min_min=10, delta_speed=2.5,
                  fLOG=print):
         """
-        Simulates velibs on a set of stations given by df.
+        Simulates velibs on a set of stations given by *df*.
 
         @param      df          dataframe with station information
         @param      nbbike      number of bicycles
@@ -644,7 +618,7 @@ class DataCollectJCDecaux:
             running = [r for i, r in enumerate(running) if i not in rem]
 
             if fLOG:
-                fLOG(iter, "time ", time, " - ", len(running),
+                fLOG("[DataCollectJCDecaux.simulate] iter", "time ", time, " - ", len(running),
                      "/", nbbike, " paths ", len(paths))
 
             # end of loop

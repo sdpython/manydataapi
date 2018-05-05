@@ -4,48 +4,48 @@
 README
 ======
 
-.. image:: https://travis-ci.org/sdpython/manyapi.svg?branch=master
-    :target: https://travis-ci.org/sdpython/manyapi
+.. image:: https://travis-ci.org/sdpython/manydataapi.svg?branch=master
+    :target: https://travis-ci.org/sdpython/manydataapi
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/jioxwx1igwbqwa28?svg=true
-    :target: https://ci.appveyor.com/project/sdpython/manyapi
+    :target: https://ci.appveyor.com/project/sdpython/manydataapi
     :alt: Build Status Windows
 
-.. image:: https://circleci.com/gh/sdpython/manyapi/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/sdpython/manyapi/tree/master
+.. image:: https://circleci.com/gh/sdpython/manydataapi/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/sdpython/manydataapi/tree/master
 
-.. image:: https://badge.fury.io/py/manyapi.svg
-    :target: https://pypi.org/project/manyapi/
+.. image:: https://badge.fury.io/py/manydataapi.svg
+    :target: https://pypi.org/project/manydataapi/
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :alt: MIT License
     :target: http://opensource.org/licenses/MIT
 
-.. image:: https://requires.io/github/sdpython/manyapi/requirements.svg?branch=master
-     :target: https://requires.io/github/sdpython/manyapi/requirements/?branch=master
+.. image:: https://requires.io/github/sdpython/manydataapi/requirements.svg?branch=master
+     :target: https://requires.io/github/sdpython/manydataapi/requirements/?branch=master
      :alt: Requirements Status
 
-.. image:: https://codecov.io/github/sdpython/manyapi/coverage.svg?branch=master
-    :target: https://codecov.io/github/sdpython/manyapi?branch=master
+.. image:: https://codecov.io/github/sdpython/manydataapi/coverage.svg?branch=master
+    :target: https://codecov.io/github/sdpython/manydataapi?branch=master
 
-.. image:: http://img.shields.io/github/issues/sdpython/manyapi.png
+.. image:: http://img.shields.io/github/issues/sdpython/manydataapi.png
     :alt: GitHub Issues
-    :target: https://github.com/sdpython/manyapi/issues
+    :target: https://github.com/sdpython/manydataapi/issues
 
-.. image:: https://badge.waffle.io/sdpython/manyapi.png?label=ready&title=Ready
+.. image:: https://badge.waffle.io/sdpython/manydataapi.png?label=ready&title=Ready
     :alt: Waffle
-    :target: https://waffle.io/sdpython/manyapi
+    :target: https://waffle.io/sdpython/manydataapi
 
-.. image:: http://www.xavierdupre.fr/app/manyapi/helpsphinx/_images/nbcov.png
-    :target: http://www.xavierdupre.fr/app/manyapi/helpsphinx/all_notebooks_coverage.html
+.. image:: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/_images/nbcov.png
+    :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
 **Links:**
 
-* `GitHub/manyapi <https://github.com/sdpython/manyapi/>`_
-* `documentation <http://www.xavierdupre.fr/app/manyapi/helpsphinx/index.html>`_
-* `Blog <http://www.xavierdupre.fr/app/manyapi/helpsphinx/blog/main_0000.html#ap-main-0>`_
+* `GitHub/manydataapi <https://github.com/sdpython/manydataapi/>`_
+* `documentation <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/index.html>`_
+* `Blog <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/blog/main_0000.html#ap-main-0>`_
 
 Description
 -----------
