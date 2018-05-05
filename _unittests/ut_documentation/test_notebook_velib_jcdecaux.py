@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@brief      test log(time=76s)
+@brief      test log(time=200s)
 """
 
 import sys
@@ -44,14 +44,13 @@ from pyquickhelper.pycode import get_temp_folder, add_missing_development_versio
 from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_list_finalize_ut, get_additional_paths
 
 
-class TestNotebook123Coverage(unittest.TestCase):
+class TestNotebookVelibJCDecaux(unittest.TestCase):
 
     def setUp(self):
-        add_missing_development_version(["pymyinstall", "jyquickhelper"],
-                                        __file__, hide=True)
+        add_missing_development_version(["jyquickhelper", "pyquickhelper", "pyensae"], __file__, hide=True)
 
     def a_test_notebook_runner(self, name, folder, valid=None, copy_folder=None):
-        temp = get_temp_folder(__file__, "temp_notebook_123_{0}".format(name))
+        temp = get_temp_folder(__file__, "temp_nb_velib_{0}".format(name))
         doc = os.path.join(temp, "..", "..", "..", "_doc", "notebooks", folder)
         self.assertTrue(os.path.exists(doc))
         keepnote = [os.path.join(doc, _) for _ in os.listdir(doc) if name in _]
@@ -68,9 +67,9 @@ class TestNotebook123Coverage(unittest.TestCase):
 
         import pyquickhelper
         import jyquickhelper
-        import pymyinstall
+        import pyensae
         add_path = get_additional_paths(
-            [jyquickhelper, pyquickhelper, pymyinstall, thismodule])
+            [jyquickhelper, pyquickhelper, pyensae, thismodule])
         res = execute_notebook_list(
             temp, keepnote, additional_path=add_path, valid=valid)
         execute_notebook_list_finalize_ut(res, fLOG=fLOG, dump=thismodule)

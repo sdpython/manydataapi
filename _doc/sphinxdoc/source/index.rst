@@ -5,7 +5,7 @@ manydataapi documentation
     :target: https://travis-ci.org/sdpython/manydataapi
     :alt: Build status
 
-.. image:: https://ci.appveyor.com/api/projects/status/jioxwx1igwbqwa28?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/hbi3d7kl4gde07o0?svg=true
     :target: https://ci.appveyor.com/project/sdpython/manydataapi
     :alt: Build Status Windows
 

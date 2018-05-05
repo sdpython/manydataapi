@@ -21,10 +21,11 @@ install:
   - "%PYTHON%\\Scripts\\pymy_install3 --set=pyquickhelper"
   - "%PYTHON%\\Scripts\\pip install keyring jyquickhelper"
   - "%PYTHON%\\Scripts\\pip install moviepy"
+  - "%PYTHON%\\Scripts\\pip install pyensae"
   - "%PYTHON%\\Scripts\\pip install pycodestyle prompt_toolkit ipykernel"
   - "%PYTHON%\\Scripts\\pymy_install3 --task=tool --source=zip graphviz"
-  - "set PATH=%PATH%;C:\\projects\\pyensae\\build\\update_modules\\Graphviz\\bin"
-  - "dir C:\\projects\\pyensae\\build\\update_modules\\Graphviz\\bin"
+  - "set PATH=%PATH%;C:\\projects\\manydataapi\\build\\update_modules\\Graphviz\\bin"
+  - "dir C:\\projects\\manydataapi\\build\\update_modules\\Graphviz\\bin"
 build: off
 
 test_script:
@@ -35,4 +36,4 @@ after_test:
 
 artifacts:
   - path: dist
-    name: pyensae
+    name: manydataapi

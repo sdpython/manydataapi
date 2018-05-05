@@ -1,5 +1,7 @@
 coverage
 jyquickhelper
 keyring
+moviepy
+pyensae
 pyquickhelper
 python-linkedin-v2
