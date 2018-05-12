@@ -3,7 +3,7 @@ jyquickhelper
 keyring
 moviepy
 pyensae
-pyquickhelper
+pyquickhelper>=1.8
 python-linkedin-v2
 sphinx
 sphinxjp.themes.basicstrap

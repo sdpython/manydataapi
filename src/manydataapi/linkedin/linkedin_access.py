@@ -20,7 +20,6 @@ You should install: `sdpython/python-linkedin <https://github.com/sdpython/pytho
 """
 import copy
 import warnings
-import logging
 
 
 class LinkedInAccess:
@@ -29,7 +28,9 @@ class LinkedInAccess:
     This class manages the access to LinkedIn functionalities.
 
     It assumes you requested an access to the `API LinkedIn <http://developer.linkedin.com/rest>`_
-    See also  `ipython + python-linkedin <http://nbviewer.ipython.org/urls/raw.github.com/ptwobrussell/Mining-the-Social-Web-2nd-Edition/master/ipynb/Chapter%203%20-%20Mining%20LinkedIn.ipynb>`_
+    See also  `ipython + python-linkedin
+    <http://nbviewer.ipython.org/urls/raw.github.com/ptwobrussell/
+    Mining-the-Social-Web-2nd-Edition/master/ipynb/Chapter%203%20-%20Mining%20LinkedIn.ipynb>`_.
 
     See `linkedin <https://github.com/andrewychoi/python3-linkedin>`_, `linkedin <https://github.com/ozgur/python-linkedin>`_.
     This class proposes simplified versions of the same methods, you should follow those link to see what is missing.
@@ -134,12 +135,12 @@ class LinkedInAccess:
         self.all_permissions = all_permissions
         return self.application
 
-    def get_profile(self, selectors=None, id=None, url=None):
+    def get_profile(self, selectors=None, idu=None, url=None):
         """
         Returns the profile of the connected user.
 
         @param      selectors       if None, it is replace by ``LinkedInAccess.default_selectors``
-        @param      id              search by id
+        @param      idu             search by id
         @param      url             search by url
         @return     json
 
@@ -149,13 +150,10 @@ class LinkedInAccess:
         if selectors is None and self.all_permissions:
             selectors = LinkedInAccess.default_selectors_profile
         return self.application.get_profile(selectors=selectors,
-                                            member_id=id, member_url=url)
+                                            member_id=idu, member_url=url)
 
-    def search_profile(self, params,
-                       selectors=None,
-                       count=10,
-                       as_df=False,
-                       start=0):
+    def search_profile(self, params, selectors=None, count=10,
+                       as_df=False, start=0):
         """
         Searches profiles on linkedin, allowed parameters (replace _ by -):
 
@@ -218,7 +216,7 @@ class LinkedInAccess:
                 params=params)
             if as_df:
                 if len(res) == 1:
-                    key, first = res.popitem()
+                    first = res.popitem()[1]
                     values = first["values"]
                     import pandas
                     return pandas.DataFrame(values)
@@ -244,7 +242,7 @@ class LinkedInAccess:
                     break
 
                 if len(se) == 1:
-                    key, first = se.popitem()
+                    first = se.popitem()[1]
                     fetched = first.get("_count", 0)
                     total += fetched
                     alls = first.get("_total", 0)

@@ -7,6 +7,8 @@ import sys
 import os
 import unittest
 import datetime
+from pyquickhelper.loghelper import fLOG
+from pyquickhelper.pycode import get_temp_folder
 
 
 try:
@@ -22,24 +24,6 @@ except ImportError:
         sys.path.append(path)
     import src
 
-try:
-    import pyquickhelper as skip_
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..",
-                "..",
-                "pyquickhelper",
-                "src")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import pyquickhelper as skip_
-
-from pyquickhelper.loghelper import fLOG
-from pyquickhelper.pycode import get_temp_folder
 from src.manydataapi.velib import DataCollectJCDecaux
 
 
@@ -66,7 +50,8 @@ class TestDataVelibOffline (unittest.TestCase):
         df.to_csv(os.path.join(fold, "out_data.txt"), sep="\t", index=False)
         dt = datetime.datetime(2014, 5, 22, 11, 49, 27, 523164)
         sub = df[df["collect_date"] == dt]
-        fig, ax, plt = DataCollectJCDecaux.draw(sub)
+        _, __, plt = DataCollectJCDecaux.draw(sub)
+        plt.close('all')
 
     def test_data_velib_animation_plt(self):
         fLOG(

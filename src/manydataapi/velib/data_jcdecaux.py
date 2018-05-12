@@ -8,16 +8,16 @@
 import os
 import os.path
 import datetime
-import urllib
 import json
 import time
 import re
-import pandas
-import numpy
 import math
 import random
+import urllib
 import urllib.error
 import urllib.request
+import pandas
+import numpy
 
 
 class DataCollectJCDecaux:
@@ -31,6 +31,18 @@ class DataCollectJCDecaux:
     `Données statiques <https://developer.jcdecaux.com/#/opendata/vls?page=static>`_.
     The API provided by :epkg:`JCDecaux` is described
     `here <https://developer.jcdecaux.com/#/opendata/vls?page=dynamic>`_.
+
+    .. exref::
+        :title: Simple code to fetch velib data
+
+        ::
+
+            private_key = 'your_key'
+
+            from manydataapi.velib import DataCollectJCDecaux
+            DataCollectJCDecaux.run_collection(private_key, contract="Besancon",
+                        delayms=30000, single_file=False, stop_datetime=None,
+                        log_every=1)
     """
 
     #: list of available cities = contract (subset)
@@ -342,6 +354,7 @@ class DataCollectJCDecaux:
             map_osm = folium.Map(location=[x, y], zoom_start=13)
 
             def add_marker(row):
+                "add marker"
                 t = "+ {0} o {1}".format(row["available_bikes"],
                                          row["available_bike_stands"])
                 folium.CircleMarker([row["lat"], row["lng"]], color='#3186cc', fill_color='#3186cc',
@@ -359,7 +372,8 @@ class DataCollectJCDecaux:
         see `animation.FuncAnimation <http://matplotlib.org/api/animation_api.html#matplotlib.animation.FuncAnimation>`_.
 
         @param      df                  dataframe
-        @param      interval            see `animation.FuncAnimation <http://matplotlib.org/api/animation_api.html#matplotlib.animation.FuncAnimation>`_
+        @param      interval            see `animation.FuncAnimation
+                                        <http://matplotlib.org/api/animation_api.html#matplotlib.animation.FuncAnimation>`_
         @param      module              module to build the animation
         @param      args                other parameters to give method ``plt.figure``
         @return                         animation
@@ -401,6 +415,7 @@ class DataCollectJCDecaux:
         import matplotlib.pyplot as plt
 
         def scatter_fig(i=0):
+            "scatter plot"
             fig, ax = plt.subplots(**args)
             x, y, c, d = datas[i]
 
@@ -416,6 +431,7 @@ class DataCollectJCDecaux:
             from matplotlib import animation
 
             def animate(i, datas, scat1, scat2):
+                "animation"
                 x, y, c, d = datas[i]
                 # scat1.set_array(numpy.array(c))
                 # scat2.set_array(numpy.array(d))
@@ -425,7 +441,7 @@ class DataCollectJCDecaux:
                 scat2._sizes = d
                 return scat1, scat2
 
-            fig, ax, scat1, scat2 = scatter_fig()
+            fig, _, scat1, scat2 = scatter_fig()
             anim = animation.FuncAnimation(fig, animate, frames=len(datas),
                                            interval=interval, fargs=(datas, scat1, scat2), blit=True)
             plt.close('all')
@@ -436,6 +452,7 @@ class DataCollectJCDecaux:
             import moviepy.editor as mpy
 
             def make_frame_mpl(t):
+                "mpl=matplotlib"
                 i = min(int(t * len(datas)), len(datas) - 1)
                 x, y, c, d = datas[i]
                 # scat1.set_xdata(x)  # <= Update the curve
@@ -446,7 +463,6 @@ class DataCollectJCDecaux:
                 return res
 
             fig, ax, scat1, scat2 = scatter_fig(0)
-
             animation = mpy.VideoClip(make_frame_mpl, duration=duration)
             return animation
         else:
@@ -503,14 +519,17 @@ class DataCollectJCDecaux:
         running = []
 
         def free(v):
+            "free bycicles"
             nb = [_ for _ in v if _ == -1]
             return len(nb) > 0
 
         def bike(v):
+            "bicycles"
             nb = [_ for _ in v if _ == -1]
             return len(nb) < len(v)
 
         def pop(v):
+            "pop"
             for i, _ in enumerate(v):
                 if _ != -1:
                     r = v[i]
@@ -520,6 +539,7 @@ class DataCollectJCDecaux:
             raise Exception("no free bike")
 
         def push(v, idv):
+            "push"
             for i, _ in enumerate(v):
                 if _ == -1:
                     v[i] = idv
@@ -527,7 +547,8 @@ class DataCollectJCDecaux:
                     return None
             raise Exception("no free spot: " + str(v))
 
-        def give_status(conf, time):
+        def give_status(conf, ti):
+            "give status"
             rows = []
             for k, v in conf.items():
                 lat, lng, name, number = k
@@ -535,8 +556,8 @@ class DataCollectJCDecaux:
                 nb = [_ for _ in v if _ == -1]
                 obs["available_bike_stands"] = len(nb)
                 obs["available_bikes"] = len(v) - len(nb)
-                obs["collect_date"] = time
-                obs["file"] = str(time)
+                obs["collect_date"] = ti
+                obs["file"] = str(ti)
                 rows.append(obs)
             return rows
 
@@ -544,10 +565,10 @@ class DataCollectJCDecaux:
         paths = []
         keys = list(current.keys())
         iter = 0
-        time = datetime.datetime.now()
+        tim = datetime.datetime.now()
         while iter < iteration:
 
-            status = give_status(current, time)
+            status = give_status(current, tim)
             simulation.extend(status)
 
             # a bike
@@ -555,7 +576,7 @@ class DataCollectJCDecaux:
                 rnd = random.randint(0, len(keys) - 1)
                 v = current[keys[rnd]]
                 if bike(v):
-                    v = (time, pop(v), keys[rnd], "begin")
+                    v = (tim, pop(v), keys[rnd], "begin")
                     running.append(v)
                     lat, lng, name, number = keys[rnd]
                     dv = {
@@ -563,17 +584,14 @@ class DataCollectJCDecaux:
                         "lng0": lng,
                         "name0": name,
                         "number0": number}
-                    dv.update({"time": v[0],
-                               "idvelo": v[1],
-                               "beginend": v[-1],
-                               "hours": 0.0,
-                               "dist": 0.0})
+                    dv.update({"time": v[0], "idvelo": v[1], "beginend": v[-1],
+                               "hours": 0.0, "dist": 0.0})
                     paths.append(dv)
 
             # do we put the bike back
             rem = []
             for i, r in enumerate(running):
-                delta = time - r[0]
+                delta = tim - r[0]
                 h = delta.total_seconds() / 3600
                 if h * 60 > min_min:
                     for rowi in cities.values:
@@ -607,7 +625,7 @@ class DataCollectJCDecaux:
                                            "lng1": lng,
                                            "name1": name,
                                            "number1": number})
-                                dv.update({"time": time,
+                                dv.update({"time": tim,
                                            "idvelo": r[1],
                                            "beginend": "end",
                                            "hours": h,
@@ -618,11 +636,11 @@ class DataCollectJCDecaux:
             running = [r for i, r in enumerate(running) if i not in rem]
 
             if fLOG:
-                fLOG("[DataCollectJCDecaux.simulate] iter", "time ", time, " - ", len(running),
+                fLOG("[DataCollectJCDecaux.simulate] iter", "time ", tim, " - ", len(running),
                      "/", nbbike, " paths ", len(paths))
 
             # end of loop
-            time += period
+            tim += period
             iter += 1
 
         return pandas.DataFrame(paths), pandas.DataFrame(simulation)

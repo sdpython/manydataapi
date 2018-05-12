@@ -6,23 +6,11 @@
 import sys
 import os
 import unittest
+from pyquickhelper.loghelper import fLOG
+from pyquickhelper.filehelper import synchronize_folder
+from pyquickhelper.pycode import get_temp_folder, add_missing_development_version, is_travis_or_appveyor
+from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_list_finalize_ut, get_additional_paths
 
-
-try:
-    import pyquickhelper as skip_
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..",
-                "..",
-                "pyquickhelper",
-                "src")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import pyquickhelper as skip_
 
 try:
     import src.manydataapi as thismodule
@@ -36,12 +24,6 @@ except ImportError:
     if path not in sys.path:
         sys.path.append(path)
     import src.manydataapi as thismodule
-
-
-from pyquickhelper.loghelper import fLOG
-from pyquickhelper.filehelper import synchronize_folder
-from pyquickhelper.pycode import get_temp_folder, add_missing_development_version, is_travis_or_appveyor
-from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_list_finalize_ut, get_additional_paths
 
 
 class TestNotebookVelibJCDecaux(unittest.TestCase):
@@ -83,7 +65,7 @@ class TestNotebookVelibJCDecaux(unittest.TestCase):
 
         if is_travis_or_appveyor():
             # The notebook requires credentials.
-            return False
+            return
 
         from imageio.plugins.ffmpeg import download
         download()

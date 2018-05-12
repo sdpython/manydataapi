@@ -8,6 +8,8 @@ import sys
 import os
 import unittest
 import warnings
+from pyquickhelper.loghelper import fLOG
+from pyquickhelper.pycode import is_travis_or_appveyor
 
 
 try:
@@ -23,25 +25,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-try:
-    import pyquickhelper as skip_
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..",
-                "..",
-                "pyquickhelper",
-                "src")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import pyquickhelper as skip_
 
-import linkedin_v2 as linkedin
-from pyquickhelper.loghelper import fLOG
-from pyquickhelper.pycode import is_travis_or_appveyor
 from src.manydataapi.linkedin import LinkedInAccess
 
 
@@ -67,7 +51,8 @@ class TestLinkedIn (unittest.TestCase):
     my_id = "9nsW-6OsQF"
 
     def start(self):
-        import linkedin_v2 as skip___
+        import linkedin_v2 as mod
+        self.assertFalse(mod is None)
 
     def get_access_token(self):
         with warnings.catch_warnings():
@@ -121,7 +106,7 @@ class TestLinkedIn (unittest.TestCase):
             fLOG(_)
             self.assertIn('id', _)
             try:
-                prof.append(linkedin.get_profile(id=_['id']))
+                prof.append(linkedin.get_profile(idu=_['id']))
             except Exception as e:
                 fLOG("error", e)
 
@@ -164,7 +149,7 @@ class TestLinkedIn (unittest.TestCase):
             fLOG(_)
             self.assertIn('id', _)
             try:
-                prof.append(linkedin.get_profile(id=_['id']))
+                prof.append(linkedin.get_profile(idu=_['id']))
             except Exception as e:
                 fLOG("error", e)
 
@@ -187,13 +172,13 @@ class TestLinkedIn (unittest.TestCase):
         linkedin = LinkedInAccess(*token)
         res = linkedin.connect()
         if __name__ == "__main__":
-            if False:
+            full = False
+            if full:
                 for year in range(2010, 2014):
                     fLOG("**** year ", year)
                     se = linkedin.search_profile(
                         params={"keywords": "ensae %d" % year},
-                        count=-1,
-                        as_table=True)
+                        count=-1, as_df=True)
                     if se is not None:
                         temp_file = os.path.abspath(
                             os.path.join(
@@ -205,8 +190,7 @@ class TestLinkedIn (unittest.TestCase):
 
                 se = linkedin.search_profile(
                     params={"keywords": "ensae"},
-                    count=-1,
-                    as_table=True)
+                    count=-1, as_df=True)
                 temp_file = os.path.abspath(
                     os.path.join(
                         os.path.split(__file__)[0],
@@ -214,22 +198,21 @@ class TestLinkedIn (unittest.TestCase):
                 fLOG("writing ", len(se))
                 se.save(temp_file, encoding="utf8")
 
-            if True:
-
-                for key in "new-york paris londres singapour montreal pekin shangai tokyo kyoto san francisco boston bank research economy statistics insurance".split():
-                    fLOG("**** key ", key)
-                    se = linkedin.search_profile(
-                        params={"keywords": "ensae %s" % key},
-                        count=-1,
-                        as_df=True)
-                    if se is not None:
-                        temp_file = os.path.abspath(
-                            os.path.join(
-                                os.path.split(__file__)[0],
-                                "temp_ensae_%s.txt" %
-                                key))
-                        fLOG("writing ", len(se))
-                        se.save(temp_file, encoding="utf8")
+            text = ("new-york paris londres singapour montreal pekin shangai tokyo kyoto san francisco " +
+                    "boston bank research economy statistics insurance")
+            for key in text.split():
+                fLOG("**** key ", key)
+                se = linkedin.search_profile(
+                    params={"keywords": "ensae %s" % key},
+                    count=-1, as_df=True)
+                if se is not None:
+                    temp_file = os.path.abspath(
+                        os.path.join(
+                            os.path.split(__file__)[0],
+                            "temp_ensae_%s.txt" %
+                            key))
+                    fLOG("writing ", len(se))
+                    se.save(temp_file, encoding="utf8")
 
         else:
             fLOG("***", res)
@@ -245,11 +228,10 @@ class TestLinkedIn (unittest.TestCase):
             fLOG("------")
             prof = []
             se = linkedin.search_profile(
-                params={
-                    "keywords": "ensae"},
-                as_table=True)
+                params={"keywords": "ensae"},
+                as_df=True)
             fLOG(se)
-            self.assertIn("headline", se.header)
+            self.assertIn("headline", list(se.columns))
             self.assertGreater(len(se), 0)
 
     def test_linkedin_connection(self):
