@@ -1,4 +1,5 @@
 coverage
+folium
 jyquickhelper
 keyring
 moviepy
