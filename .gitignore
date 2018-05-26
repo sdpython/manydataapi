@@ -273,3 +273,4 @@ _doc/notebooks/*.exe
 _doc/notebooks/data_velib
 _doc/notebooks/temp
 *.err
+_unittests/run_unittests.py.2.out
