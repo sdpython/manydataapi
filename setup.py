@@ -119,7 +119,7 @@ if is_local():
         requirements=["pyquickhelper", "jyquickhelper", "pymyinstall"],
         additional_notebook_path=["pyquickhelper", "jyquickhelper", "pyensae"],
         github_owner='sdpython', fLOG=logging_function,
-        covtoken=("3fe1e5e4-ba40-4543-bb20-96642df3d000", "'_UT_36_std' in outfile"))
+        covtoken=("3fe1e5e4-ba40-4543-bb20-96642df3d000", "'_UT_37_std' in outfile"))
     if not r and not ({"bdist_msi", "sdist",
                        "bdist_wheel", "publish", "publish_doc", "register",
                        "upload_docs", "bdist_wininst", "build_ext"} & set(sys.argv)):
