@@ -41,10 +41,8 @@ class TestDataJCDecaux (ExtTestCase):
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', DeprecationWarning)
             import keyring
-        machine = os.environ.get(
-            "COMPUTERNAME", os.environ.get("HOSTNAME", "CI"))
         try:
-            key = keyring.get_password("velib", machine)
+            key = keyring.get_password("velib", "manydataapi,key")
         except RuntimeError:
             key = None
         if not is_travis_or_appveyor() and key is None:
