@@ -1,9 +1,4 @@
 
-.. _l-README:
-
-README
-======
-
 .. image:: https://travis-ci.org/sdpython/manydataapi.svg?branch=master
     :target: https://travis-ci.org/sdpython/manydataapi
     :alt: Build status
@@ -41,13 +36,15 @@ README
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-**Links:**
+.. _l-README:
+
+manydataapi
+===========
+
+Pieces of code to access various (REST) API.
+It is difficult to test code built on top of API as it usually
+requires authentification. It is easier to put everything in one place.
 
 * `GitHub/manydataapi <https://github.com/sdpython/manydataapi/>`_
 * `documentation <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/index.html>`_
 * `Blog <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/blog/main_0000.html#ap-main-0>`_
-
-Description
------------
-
-Pieces of code to access various (REST) API.
