@@ -1,5 +1,6 @@
 coverage
 folium
+imageio-ffmpeg
 jyquickhelper
 keyring
 moviepy
