@@ -27,7 +27,7 @@ except ImportError:
 from src.manydataapi.velib import DataCollectJCDecaux
 
 
-class TestDataVelibOffline (unittest.TestCase):
+class TestDataVelibOffline(unittest.TestCase):
 
     def test_data_velib_contract(self):
         fLOG(
@@ -81,8 +81,6 @@ class TestDataVelibOffline (unittest.TestCase):
         if "travis" in sys.executable:
             return
 
-        from imageio.plugins.ffmpeg import download
-        download()
         df = DataCollectJCDecaux.to_df(data)
         anim = DataCollectJCDecaux.animation(df, module="moviepy")
         self.assertTrue(anim is not None)
