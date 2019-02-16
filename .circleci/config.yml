@@ -49,6 +49,11 @@ jobs:
                     sudo apt-get install -y graphviz
           
       - run:
+          name: Install ffmpeg
+          command: |
+                    sudo apt-get install -y ffmpeg
+          
+      - run:
           name: install dependencies
           command: |
             python3 -m venv venv
