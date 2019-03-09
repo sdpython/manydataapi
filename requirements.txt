@@ -4,10 +4,10 @@ imageio-ffmpeg
 jyquickhelper
 keyring
 moviepy
+git+https://github.com/sdpython/nbconvert.git@fixes
 pyensae
 pyquickhelper>=1.8
 python-linkedin-v2
 sphinx
 sphinxjp.themes.basicstrap
 wheel
-

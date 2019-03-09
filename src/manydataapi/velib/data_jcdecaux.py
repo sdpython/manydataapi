@@ -238,7 +238,7 @@ class DataCollectJCDecaux:
 
             ::
 
-                from pyensae.datasource import DataCollectJCDecaux
+                from manydataapi.velib.data_jcdecaux import DataCollectJCDecaux
                 DataCollectJCDecaux.run_collection(private_key, contract="Paris",
                             delayms=60000, single_file=False, stop_datetime=None,
                             log_every=1)
