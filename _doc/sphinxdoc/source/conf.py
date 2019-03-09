@@ -13,6 +13,9 @@ set_sphinx_variables(__file__, "manydataapi", "Xavier Dupré", 2019,
 blog_root = "http://www.xavierdupre.fr/app/manydataapi/helpsphinx/"
 blog_background = False
 
-epkg_dictionary["JCDecaux"] = 'http://www.jcdecaux.com/fr/pour-nos-partenaires/velos-en-libre-service'
-epkg_dictionary["linkedin"] = 'https://www.linkedin.com/'
-epkg_dictionary["velib"] = 'https://www.velib-metropole.fr/'
+epkg_dictionary.update({
+    "JCDecaux": 'http://www.jcdecaux.com/fr/pour-nos-partenaires/velos-en-libre-service',
+    "linkedin": 'https://www.linkedin.com/',
+    "LinkedIn": 'https://www.linkedin.com/',
+    "velib": 'https://www.velib-metropole.fr/',
+})

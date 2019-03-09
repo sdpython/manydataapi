@@ -25,25 +25,25 @@ import warnings
 class LinkedInAccess:
 
     """
-    This class manages the access to LinkedIn functionalities.
+    This class manages the access to :epkg:`LinkedIn` functionalities.
 
     It assumes you requested an access to the `API LinkedIn <http://developer.linkedin.com/rest>`_
-    See also  `ipython + python-linkedin
+    See also `ipython + python-linkedin
     <http://nbviewer.ipython.org/urls/raw.github.com/ptwobrussell/
     Mining-the-Social-Web-2nd-Edition/master/ipynb/Chapter%203%20-%20Mining%20LinkedIn.ipynb>`_.
 
     See `linkedin <https://github.com/andrewychoi/python3-linkedin>`_, `linkedin <https://github.com/ozgur/python-linkedin>`_.
     This class proposes simplified versions of the same methods, you should follow those link to see what is missing.
+    About :epkg:`LinkedIn`:
 
-    About LinkedIn:
-       -  Throttle limits: see `throttle-limits <http://developer.linkedin.com/documents/throttle-limits>`_
-       - To see your API usage: `API limits <https://www.linkedin.com/secure/developer>`_
-       - Setting up your `Permissions <https://developer.linkedin.com/documents/authentication#granting>`_
-       - `Developing page <https://developer.linkedin.com/whydevelop>`_
-       - `Connections API <http://developer.linkedin.com/documents/connections-api>`_
-       - `Extend your throttle limits <http://developer.linkedin.com/themes/linkedin-home/form-api.html>`_
-       - `Accounts <http://www.linkedin.com/mnyfe/subscriptionv2?displaySalesProduct=&identify=false&crm=sfdc>`_
-       - `Accounts comparison <http://www.linkedin.com/mnyfe/subscriptionv2?displayProducts=&family=general&commpare_acct=>`_
+   -  Throttle limits: see `throttle-limits <http://developer.linkedin.com/documents/throttle-limits>`_
+   - To see your API usage: `API limits <https://www.linkedin.com/secure/developer>`_
+   - Setting up your `Permissions <https://developer.linkedin.com/documents/authentication#granting>`_
+   - `Developing page <https://developer.linkedin.com/whydevelop>`_
+   - `Connections API <http://developer.linkedin.com/documents/connections-api>`_
+   - `Extend your throttle limits <http://developer.linkedin.com/themes/linkedin-home/form-api.html>`_
+   - `Accounts <http://www.linkedin.com/mnyfe/subscriptionv2?displaySalesProduct=&identify=false&crm=sfdc>`_
+   - `Accounts comparison <http://www.linkedin.com/mnyfe/subscriptionv2?displayProducts=&family=general&commpare_acct=>`_
 
     Search API::
 
@@ -93,10 +93,7 @@ class LinkedInAccess:
                     'member-url-resources', 'email-address',
                     ]}]
 
-    def __init__(self, api_key,
-                 secret_key,
-                 user_token,
-                 user_secret):
+    def __init__(self, api_key, secret_key, user_token, user_secret):
         """
         All the following parameter are given when you request an access
         to :epkg:`linkedin`.
@@ -153,7 +150,7 @@ class LinkedInAccess:
                                             member_id=idu, member_url=url)
 
     def search_profile(self, params, selectors=None, count=10,
-                       as_df=False, start=0):
+                       as_df=False, start=0, fLOG=None):
         """
         Searches profiles on linkedin, allowed parameters (replace _ by -):
 
@@ -186,6 +183,7 @@ class LinkedInAccess:
         @param      count           1 to 25, if -1 or > 25, search for all (do multiple searches and concatenate them
         @param      as_df           return a DataFrame
         @param      start           first result to fetch
+        @param      fLOG            logging function
         @return                     json format (or DataFrame if as_df is True or None if there is nothing to return)
 
         Example of code::
@@ -201,7 +199,8 @@ class LinkedInAccess:
             for _ in se["people"]["values"] :
                 print(_)
         """
-        from linkedin_v2 import linkedin
+        from linkedin_v2.exceptions import LinkedInError
+
         if selectors is None and self.all_permissions:
             selectors = LinkedInAccess.default_selectors_search_profile
 
@@ -211,7 +210,7 @@ class LinkedInAccess:
         params["start"] = start
 
         if 0 <= count <= 25:
-            res = self.application.search_profile(
+            res = self.application.search_profile(  # pylint: disable=E1101
                 selectors=selectors,
                 params=params)
             if as_df:
@@ -233,10 +232,10 @@ class LinkedInAccess:
             while True:
                 params["start"] = start
                 try:
-                    se = self.application.search_profile(
+                    se = self.application.search_profile(  # pylint: disable=E1101
                         selectors=selectors,
                         params=params)
-                except linkedin.LinkedInError as e:
+                except LinkedInError as e:
                     if "Throttle limit" in str(e):
                         warnings.warn(e)
                     break
@@ -257,9 +256,9 @@ class LinkedInAccess:
                 else:
                     res.append(se)
 
-                self.fLOG(
-                    "LinkedInAccess.search_profile [bound=%d,count=%d,fetched=%d,total=%d,alls=%d]" %
-                    (bound, count, fetched, total, alls))
+                if fLOG:
+                    fLOG("LinkedInAccess.search_profile [bound=%d,count=%d,fetched=%d,total=%d,alls=%d]" %
+                         (bound, count, fetched, total, alls))
                 if fetched < bound or (count != -1 and len(res) >= count):
                     break
                 start = total
@@ -273,35 +272,10 @@ class LinkedInAccess:
             else:
                 return res
 
-    def get_connections(self, member_id=None,
-                        member_url=None,
-                        selectors=None,
-                        params=None):
+    def get_connections(self, totals_only=None, params=None, headers=None):
         """
         Retrieves the connection for a given profile.
-
-        @param      member_id       member id (id or url)
-        @param      member_url      member url (id or url)
-        @param      selectors       fields to select (@see me search_profile)
-        @param      params          parameters
-        @return                     list of connections
-
-        Example of code::
-
-            accessToken = ["w....", "n....",
-                           "3....", "2..." ]
-
-            linkedin = LinkedInAccess (*TestLinkedIn.accessToken)
-            linkedin.connect()
-            profile = linkedin.get_profile()
-            connections = linkedin.get_connection(member_id = profile["id"])
-
-            for conn in connections["values"] :
-                print (conn)
         """
         res = self.application.get_connections(
-            member_id=member_id,
-            member_url=member_url,
-            selectors=selectors,
-            params=params)
+            totals_only=totals_only, params=params, headers=headers)
         return res
