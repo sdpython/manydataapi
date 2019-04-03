@@ -67,8 +67,6 @@ class TestNotebookVelibJCDecaux(unittest.TestCase):
             # The notebook requires credentials.
             return
 
-        from imageio.plugins.ffmpeg import download
-        download()
         self.a_test_notebook_runner("velib", ".")
 
 
