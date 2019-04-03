@@ -3,6 +3,8 @@ folium
 imageio-ffmpeg
 jyquickhelper
 keyring
+imageio
+imageio-ffmpeg
 moviepy
 git+https://github.com/sdpython/nbconvert.git@fixes
 pyensae
