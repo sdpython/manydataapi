@@ -24,6 +24,7 @@ install:
   - "set PATH=%PATH%;C:\\projects\\manydataapi\\build\\update_modules\\Graphviz\\bin"
   - "dir C:\\projects\\manydataapi\\build\\update_modules\\Graphviz\\bin"
   - "%PYTHON%\\python -c \"from pymyinstall.fix import fix_win32ctypes_core_cffi__advapi32_py;fix_win32ctypes_core_cffi__advapi32_py(fLOG=print)\""
+  - set PYTHONPATH=src
 build: off
 
 test_script:

@@ -2,28 +2,13 @@
 """
 @brief      test log(time=200s)
 """
-
-import sys
 import os
 import unittest
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.filehelper import synchronize_folder
 from pyquickhelper.pycode import get_temp_folder, add_missing_development_version, is_travis_or_appveyor
 from pyquickhelper.ipythonhelper import execute_notebook_list, execute_notebook_list_finalize_ut, get_additional_paths
-
-
-try:
-    import src.manydataapi as thismodule
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src.manydataapi as thismodule
+import manydataapi as thismodule
 
 
 class TestNotebookVelibJCDecaux(unittest.TestCase):

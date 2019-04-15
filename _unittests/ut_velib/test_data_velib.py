@@ -1,9 +1,6 @@
 """
 @brief      test log(time=28s)
 """
-
-
-import sys
 import os
 import unittest
 import datetime
@@ -11,23 +8,7 @@ import warnings
 import pandas
 from pyquickhelper.loghelper import fLOG
 from pyquickhelper.pycode import is_travis_or_appveyor, get_temp_folder, ExtTestCase
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-
-from src.manydataapi.velib import DataCollectJCDecaux
+from manydataapi.velib import DataCollectJCDecaux
 
 
 class TestDataJCDecaux (ExtTestCase):
@@ -81,7 +62,7 @@ class TestDataJCDecaux (ExtTestCase):
 
         velib = DataCollectJCDecaux(key)
         # Paris changed velib's owner (2018-01).
-        js = velib.get_json("Besancon")
+        js = velib.get_json("besancon")
 
         self.assertIsInstance(js, list)
         fLOG(type(js))
@@ -188,7 +169,7 @@ class TestDataJCDecaux (ExtTestCase):
         if key is None:
             return
 
-        DataCollectJCDecaux.run_collection(key, contract="Besancon", delayms=1000,
+        DataCollectJCDecaux.run_collection(key, contract="besancon", delayms=1000,
                                            folder_file=temp_file, single_file=True,
                                            stop_datetime=dt, log_every=1, fLOG=fLOG)
 

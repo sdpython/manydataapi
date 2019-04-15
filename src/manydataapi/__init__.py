@@ -8,7 +8,7 @@ mostly used for teaching purpose.
 import sys
 
 
-__version__ = "0.1"
+__version__ = "0.2"
 __author__ = "Xavier Dupré"
 __github__ = "https://github.com/sdpython/manydataapi"
 __url__ = "http://www.xavierdupre.fr/app/manydataapi/helpsphinx/index.html"
