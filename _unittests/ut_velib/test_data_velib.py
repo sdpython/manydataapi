@@ -137,7 +137,7 @@ class TestDataJCDecaux (ExtTestCase):
             return
 
         # Paris changed velib's owner (2018-01)
-        DataCollectJCDecaux.run_collection(key, contract="Nancy", delayms=1000,
+        DataCollectJCDecaux.run_collection(key, contract="nancy", delayms=1000,
                                            folder_file=temp_file, single_file=True,
                                            stop_datetime=dt, log_every=1, fLOG=fLOG)
 
