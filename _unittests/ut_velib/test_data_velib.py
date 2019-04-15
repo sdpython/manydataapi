@@ -11,7 +11,7 @@ from pyquickhelper.pycode import is_travis_or_appveyor, get_temp_folder, ExtTest
 from manydataapi.velib import DataCollectJCDecaux
 
 
-class TestDataJCDecaux (ExtTestCase):
+class TestDataJCDecaux(ExtTestCase):
 
     def get_private_key(self):
         """
@@ -98,7 +98,7 @@ class TestDataJCDecaux (ExtTestCase):
             return
 
         velib = DataCollectJCDecaux(key)
-        velib.collecting_data("Paris", 1000, temp_file, stop_datetime=dt,
+        velib.collecting_data("nancy", 1000, temp_file, stop_datetime=dt,
                               log_every=1, fLOG=fLOG)
 
         if not os.path.exists(temp_file):
@@ -113,7 +113,7 @@ class TestDataJCDecaux (ExtTestCase):
         self.assertIn("\t", lines[0])
 
         dt = datetime.datetime.now() + delay
-        velib.collecting_data("Paris", 1000, temp_file, stop_datetime=dt,
+        velib.collecting_data("nancy", 1000, temp_file, stop_datetime=dt,
                               single_file=False, log_every=1, fLOG=fLOG)
         res = os.listdir(tempfold)
         if len(res) <= 2:

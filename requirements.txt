@@ -8,7 +8,7 @@ imageio-ffmpeg
 moviepy
 git+https://github.com/sdpython/nbconvert.git@fixes
 pyensae
-pyquickhelper>=1.8
+pyquickhelper>=1.9
 python-linkedin-v2
 sphinx
 sphinx_readable_theme

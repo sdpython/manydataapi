@@ -40,15 +40,13 @@ class DataCollectJCDecaux:
             private_key = 'your_key'
 
             from manydataapi.velib import DataCollectJCDecaux
-            DataCollectJCDecaux.run_collection(private_key, contract="Besancon",
+            DataCollectJCDecaux.run_collection(private_key, contract="besancon",
                         delayms=30000, single_file=False, stop_datetime=None,
                         log_every=1)
     """
 
     #: list of available cities = contract (subset)
-    _contracts_static = {k: 1 for k in ['Arcueil', 'Besancon', 'Lyon',
-                                        'Paris',
-                                        ]}
+    _contracts_static = {k: 1 for k in ['arcueil', 'besancon', 'lyon', 'nancy']}
 
     # api: two substring to replace (contract, apiKey)
     _url_api = "https://api.jcdecaux.com/vls/v1/stations?contract=%s&apiKey=%s"
@@ -71,7 +69,7 @@ class DataCollectJCDecaux:
         """
         Returns the list of contracts.
 
-        @return     dictionary    { 'station':1 }
+        @return     dictionary, something like ``{'station': 1}``
         """
         url = DataCollectJCDecaux._url_apic % (self.apiKey)
         try:
@@ -99,7 +97,7 @@ class DataCollectJCDecaux:
         Returns the data associated to a contract.
 
         @param      contract        contract name, @see te _contracts
-        @return                     json string
+        @return                     :epkg:`json` string
         """
         if contract not in self.contracts:
             raise Exception(
@@ -151,7 +149,7 @@ class DataCollectJCDecaux:
                     o["position"]["lng"]) if o["position"]["lng"] is not None else None
             except TypeError as e:
                 raise TypeError(
-                    "unable to convert geocode for the following row: %s\n%s" %
+                    "Unable to convert geocode for the following row: %s\n%s" %
                     (str(o), str(e)))
 
             key = contract, o["number"]
@@ -288,10 +286,8 @@ class DataCollectJCDecaux:
 
         if len(files) == 0:
             raise FileNotFoundError(
-                "no found files in directory: " +
-                folder +
-                "\nregex: " +
-                regex)
+                "No found files in directory: '{}'\nregex: '{}'.".format(
+                    folder, regex))
 
         rows = []
         for file_ in files:
@@ -299,7 +295,7 @@ class DataCollectJCDecaux:
             with open(file, "r", encoding="utf8") as f:
                 lines = f.readlines()
             for i, line in enumerate(lines):
-                dl = eval(line.strip("\n\r\t "))
+                dl = eval(line.strip("\n\r\t "))  # pylint: disable=W0123
                 if not isinstance(dl, list):
                     raise TypeError(
                         "we expect a list for line {0} in file {1}".format(
@@ -369,7 +365,8 @@ class DataCollectJCDecaux:
     def animation(df, interval=20, module="matplotlib", **args):
         """
         Displays a javascript animation,
-        see `animation.FuncAnimation <http://matplotlib.org/api/animation_api.html#matplotlib.animation.FuncAnimation>`_.
+        see `animation.FuncAnimation
+        <http://matplotlib.org/api/animation_api.html#matplotlib.animation.FuncAnimation>`_.
 
         @param      df                  dataframe
         @param      interval            see `animation.FuncAnimation
@@ -432,7 +429,7 @@ class DataCollectJCDecaux:
 
             def animate(i, datas, scat1, scat2):
                 "animation"
-                x, y, c, d = datas[i]
+                _, __, c, d = datas[i]
                 # scat1.set_array(numpy.array(c))
                 # scat2.set_array(numpy.array(d))
                 #scat1.set_array(numpy.array(x + y))
@@ -454,7 +451,7 @@ class DataCollectJCDecaux:
             def make_frame_mpl(t):
                 "mpl=matplotlib"
                 i = min(int(t * len(datas)), len(datas) - 1)
-                x, y, c, d = datas[i]
+                __, _, c, d = datas[i]
                 # scat1.set_xdata(x)  # <= Update the curve
                 # scat1.set_ydata(y)  # <= Update the curve
                 scat1._sizes = c
@@ -462,7 +459,7 @@ class DataCollectJCDecaux:
                 res = mplfig_to_npimage(fig)
                 return res
 
-            fig, ax, scat1, scat2 = scatter_fig(0)
+            fig, _, scat1, scat2 = scatter_fig(0)
             animation = mpy.VideoClip(make_frame_mpl, duration=duration)
             return animation
         else:
@@ -594,7 +591,7 @@ class DataCollectJCDecaux:
                 delta = tim - r[0]
                 h = delta.total_seconds() / 3600
                 if h * 60 > min_min:
-                    for rowi in cities.values:
+                    for _ in cities.values:
                         row = cities.values[random.randint(0, len(cities) - 1)]
                         keycity = tuple(row)
                         station = current[keycity]

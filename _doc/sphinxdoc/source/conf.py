@@ -18,5 +18,6 @@ epkg_dictionary.update({
     "JCDecaux": 'http://www.jcdecaux.com/fr/pour-nos-partenaires/velos-en-libre-service',
     "linkedin": 'https://www.linkedin.com/',
     "LinkedIn": 'https://www.linkedin.com/',
+    'moviepy': 'https://zulko.github.io/moviepy/',
     "velib": 'https://www.velib-metropole.fr/',
 })
