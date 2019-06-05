@@ -28,10 +28,6 @@
     :alt: GitHub Issues
     :target: https://github.com/sdpython/manydataapi/issues
 
-.. image:: https://badge.waffle.io/sdpython/manydataapi.png?label=ready&title=Ready
-    :alt: Waffle
-    :target: https://waffle.io/sdpython/manydataapi
-
 .. image:: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/_images/nbcov.png
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
@@ -41,8 +37,8 @@
 manydataapi
 ===========
 
-Pieces of code to access various (REST) API.
-It is difficult to test code built on top of API as it usually
+Pieces of code to access various (REST) API or to parse
+weird formats. It is difficult to test code built on top of API as it usually
 requires authentification. It is easier to put everything in one place.
 
 * `GitHub/manydataapi <https://github.com/sdpython/manydataapi/>`_

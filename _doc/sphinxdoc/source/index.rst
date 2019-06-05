@@ -30,10 +30,6 @@ manydataapi documentation
 .. image:: https://codecov.io/github/sdpython/manydataapi/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/manydataapi?branch=master
 
-.. image:: https://badge.waffle.io/sdpython/manydataapi.png?label=ready&title=Ready
-    :alt: Waffle
-    :target: https://waffle.io/sdpython/manydataapi
-
 .. image:: nbcov.png
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
@@ -50,8 +46,8 @@ manydataapi documentation
 What is it?
 -----------
 
-Pieces of code to access various REST API mostly for
-teaching purposes.
+Pieces of code to access various REST API or to parse
+weird text format mostly for teaching purposes.
 
 .. toctree::
     :maxdepth: 1
@@ -63,13 +59,6 @@ teaching purposes.
     all_notebooks
     blog/blogindex
     HISTORY
-
-Navigation
-----------
-
-.. toctree::
-    :maxdepth: 1
-
     indexmenu
 
 +------------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
