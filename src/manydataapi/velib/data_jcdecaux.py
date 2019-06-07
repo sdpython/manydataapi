@@ -46,7 +46,8 @@ class DataCollectJCDecaux:
     """
 
     #: list of available cities = contract (subset)
-    _contracts_static = {k: 1 for k in ['arcueil', 'besancon', 'lyon', 'nancy']}
+    _contracts_static = {k: 1 for k in [
+        'arcueil', 'besancon', 'lyon', 'nancy']}
 
     # api: two substring to replace (contract, apiKey)
     _url_api = "https://api.jcdecaux.com/vls/v1/stations?contract=%s&apiKey=%s"
