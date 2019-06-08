@@ -7,6 +7,7 @@ imageio
 imageio-ffmpeg
 moviepy
 git+https://github.com/sdpython/nbconvert.git@fixes
+openpyxl
 pyensae
 pyquickhelper>=1.9
 python-linkedin-v2
