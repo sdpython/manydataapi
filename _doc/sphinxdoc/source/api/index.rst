@@ -7,4 +7,5 @@ API
 
     linkedin
     parsers
+    plotting
     velib
