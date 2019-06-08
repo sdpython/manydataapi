@@ -3,6 +3,7 @@
 """
 import datetime
 import os
+import pprint
 import unittest
 from pyquickhelper.pycode import ExtTestCase
 from manydataapi.parsers.ct1 import dummy_ct1, read_ct1
@@ -11,7 +12,8 @@ from manydataapi.parsers.folders import read_folder
 
 class TestCt1(ExtTestCase):
 
-    exp = {'DATETIME': datetime.datetime(2011, 6, 5, 11, 30, 56),
+    exp = {'BASKET': 'HASH1',
+           'DATETIME': datetime.datetime(2011, 6, 5, 11, 30, 56),
            'FCODE': '5',
            'FCODE1': '00004',
            'FCODE2': '000107',
@@ -26,7 +28,6 @@ class TestCt1(ExtTestCase):
            'INFOL2_2': '',
            'INFOL2_3': '0',
            'INFOL2_4': '0',
-           'INFO_': 'HASH1',
            'NAME': 'PERS1',
            'NB1': '0',
            'NB2': '4',
@@ -44,13 +45,14 @@ class TestCt1(ExtTestCase):
                      'IT8': '0',
                      'IT9': '   0.00',
                      'ITCODE': '800',
+                     'ITMANUAL': '0',
                      'ITNAME': 'ITEM11',
                      'ITPRICE': 5.25,
                      'ITQU': 0.2501,
                      'ITUNIT': 21.0,
                      'NEG': 0.0,
                      'PIECE': False,
-                     'TVA': 0.85,
+                     'TVA': 0.28875,
                      'TVAID': '1',
                      'TVARATE': 5.5},
                     {'CAT': 0.0,
@@ -62,13 +64,14 @@ class TestCt1(ExtTestCase):
                      'IT8': '0',
                      'IT9': '   0.00',
                      'ITCODE': '605',
+                     'ITMANUAL': '0',
                      'ITNAME': 'ITEM17',
                      'ITPRICE': 7.28,
                      'ITQU': 0.4043,
                      'ITUNIT': 18.0,
                      'NEG': 0.0,
                      'PIECE': False,
-                     'TVA': 0.85,
+                     'TVA': 0.4004,
                      'TVAID': '1',
                      'TVARATE': 5.5},
                     {'CAT': 2.0,
@@ -80,13 +83,14 @@ class TestCt1(ExtTestCase):
                      'IT8': '0',
                      'IT9': '   0.00',
                      'ITCODE': '102',
+                     'ITMANUAL': '0',
                      'ITNAME': 'ITEM19',
                      'ITPRICE': 3.4,
                      'ITQU': 2,
                      'ITUNIT': 1.7,
                      'NEG': 0.0,
                      'PIECE': True,
-                     'TVA': 0.85,
+                     'TVA': 0.187,
                      'TVAID': '1',
                      'TVARATE': 5.5},
                     {'CAT': 2.0,
@@ -98,13 +102,14 @@ class TestCt1(ExtTestCase):
                      'IT8': '0',
                      'IT9': '   0.00',
                      'ITCODE': '3',
+                     'ITMANUAL': '0',
                      'ITNAME': 'ITEM1',
                      'ITPRICE': 0.31,
                      'ITQU': 1,
                      'ITUNIT': 0.31,
                      'NEG': 0.0,
                      'PIECE': True,
-                     'TVA': 0.3,
+                     'TVA': 0.062,
                      'TVAID': '2',
                      'TVARATE': 20.0},
                     {'CAT': 2.0,
@@ -116,13 +121,14 @@ class TestCt1(ExtTestCase):
                      'IT8': '0',
                      'IT9': '   0.00',
                      'ITCODE': '4',
+                     'ITMANUAL': '0',
                      'ITNAME': 'ITEM2',
                      'ITPRICE': 2.5,
                      'ITQU': 1,
                      'ITUNIT': 2.5,
                      'NEG': 0.0,
                      'PIECE': True,
-                     'TVA': 0.3,
+                     'TVA': 0.5,
                      'TVAID': '2',
                      'TVARATE': 20.0}],
            'tva': [{'HT': 15.43,
@@ -136,15 +142,20 @@ class TestCt1(ExtTestCase):
         dummy = dummy_ct1()
         res = read_ct1(dummy, as_df=False)
         self.assertIsInstance(res, list)
-        self.assertEqual(len(res), 4)
+        self.assertEqual(len(res), 5)
         obs = res[0]
         self.assertEqual(len(obs['data']), 5)
-        self.assertEqual(TestCt1.exp, obs)
+        try:
+            self.assertEqual(TestCt1.exp, obs)
+        except AssertionError as e:
+            raise AssertionError(pprint.pformat(obs)) from e
 
     def test_ct1_df(self):
         dummy = dummy_ct1()
         res = read_ct1(dummy, as_df=True)
-        self.assertEqual(res.shape, (17, 41))
+        if __name__ == "__main__":
+            res.T.to_excel("temp_test.xlsx")
+        self.assertEqual(res.shape, (22, 43))
 
     def test_ct1_folder(self):
         dummy = dummy_ct1()

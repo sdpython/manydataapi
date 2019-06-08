@@ -16,16 +16,16 @@ def dummy_ct1():
     .. runpython::
         :showcode:
 
-        from manydataapi.parsers.ct1 import dummy_ct1()
+        from manydataapi.parsers.ct1 import dummy_ct1
         name = dummy_ct1()
-        with open(name) as f:
+        with open(name, "r") as f:
             for i, line in enumerate(f):
-                print(i, line)
+                print(i, [line])
                 if i > 10:
                     break
     """
     this = os.path.dirname(__file__)
-    data = os.path.join(this, "dummies", "DDMMYYXX.CT1")
+    data = os.path.join(this, "dummies", "DDMMYYXX.map")
     if not os.path.exists(data):
         raise FileNotFoundError(data)
     return data
@@ -40,13 +40,59 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
     @param      encoding        encoding
     @param      as_df           returns the results as a dataframe
     @return                     dataframe
+
+    Meaning of the columns:
+
+    * BASKET: basket id
+    * CAT: item is a quantity or a piece
+    * DATETIME: date and time
+    * FCODE, FCODE1, FCODE2: ?
+    * HT: price with no taxes
+    * INFO0, INFO1, INFO2, INFO3, INFO4, INFOL2, INFOL2_1,
+      INFOL2_2, INFOL2_3, INFOL2_4: ?
+    * IT1, IT10, IT2, IT4, IT6, IT8, IT9: ?
+    * ITCODE: item code, every item ending by X is an item
+      automatically added by the parser to fix the total
+    * ITMANUAL: manually change the total
+    * ITNAME: item name
+    * ITPRICE: price paid
+    * ITQU: quantity (kg or number of pieces)
+    * ITUNIT: price per unit
+    * NAME: vendor's name
+    * NB1, NB2: ?
+    * NEG: some item have a negative price
+    * PIECE: the quantity is a weight (False) or a number (True)
+    * PLACE, STREET, ZIPCODE: location
+    * TOTAL: total paid for the basket
+    * TVA: tax for an item
+    * TVAID: tax id
+    * TVARATE: tax rate
+    * ERROR: check this line later
     """
     if len(file_or_str) < 4000 and os.path.exists(file_or_str):
         with open(file_or_str, encoding=encoding) as f:
             content = f.read()
 
     def _post_process(rec):
+        manual = [o for o in rec['data'] if o['ITMANUAL'] == '1']
+        if len(manual) > 1:
+            raise ValueError("More than one manual item.")
+        is_manual = len(manual) == 1
+
         total = sum(obs['ITPRICE'] for obs in rec['data'])
+        if is_manual:
+            diff = record['TOTAL-'] - total
+            new_obs = {'CAT': 2.0, 'ERROR': 0.0,
+                       'ITCODE': '30002X',
+                       'ITMANUAL': '2',
+                       'ITPRICE': diff,
+                       'ITQU': 1,
+                       'ITUNIT': abs(diff),
+                       'NEG': 1 if diff < 0 else 0,
+                       'PIECE': True, 'TVAID': manual[0]['TVAID']}
+            rec['data'].append(new_obs)
+            total = sum(obs['ITPRICE'] for obs in rec['data'])
+
         rec['TOTAL'] = total
         if abs(record['TOTAL-'] - rec['TOTAL']) >= 0.01:
             raise ValueError("Mismatch total' {} != {}".format(
@@ -57,10 +103,18 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         del record['TOTAL_']
         del record['TOTAL-']
         tva_d = {t['TVAID']: t for t in record['tva']}
-        for item in record['data']:
-            tvaid = item['TVAID']
-            item['TVARATE'] = tva_d[tvaid]['RATE']
-            item['TVA'] = tva_d[tvaid]['VALUE']
+        if is_manual:
+            for item in record['data']:
+                if item['ITMANUAL'] != '2':
+                    continue
+                tvaid = item['TVAID']
+                item['TVARATE'] = tva_d[tvaid]['RATE']
+                item['TVA'] = item['ITPRICE'] * item['TVARATE'] / 100
+        else:
+            for item in record['data']:
+                tvaid = item['TVAID']
+                item['TVARATE'] = tva_d[tvaid]['RATE']
+                item['TVA'] = item['ITPRICE'] * item['TVARATE'] / 100
         if len(record["data"]) == 0:
             raise ValueError("No record.")
 
@@ -83,7 +137,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             if record is None:
                 raise RuntimeError("Wrong format at line {}".format(i + 1))
             line = line.strip("\x04\x05")
-            record['INFO_'] = line  # pylint: disable=E1137
+            record['BASKET'] = line  # pylint: disable=E1137
 
             # verification
             if len(record['data']) > 0:  # pylint: disable=E1136
@@ -119,7 +173,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             names = ['ITCODE', 'ITNAME', 'IT1', 'IT2', 'TVAID', 'IT4',
                      'ITUNIT', 'ITQU', 'CAT', 'ITPRICE',
                      'IT6', 'NEG', 'IT8', 'IT9', 'IT10', 'IT11', 'IT12']
-            obs = {}
+            obs = {'ITMANUAL': '0'}
             for n, v in zip(names, spl):
                 if n in ['ITUNIT', 'ITQU', 'ITPRICE', 'NEG', 'CAT']:
                     obs[n] = float(v.replace(" ", ""))
@@ -135,17 +189,28 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                 obs['ITUNIT'] *= -1
                 obs['ITPRICE'] *= -1
             diff = abs(obs['ITQU'] * obs['ITUNIT'] - obs['ITPRICE'])
+            add_obs = None
             if diff >= 0.01:  # 1 cent
                 obs['ERROR'] = diff
-                if obs['ITQU'] == 0 and obs['ITUNIT'] == 0:
+                if obs['ITQU'] == 0 or obs['ITUNIT'] == 0:
                     obs['ERROR'] = 0.
-                    obs['WHY'] = True
                     obs['ITPRICE'] = 0.
-                elif diff >= 0.1:
-                    raise ValueError("{} * {} = {} != {} at line {}\n{}\n{}".format(
-                        obs['ITQU'], obs['ITUNIT'], obs['ITQU'] * obs['ITUNIT'],
-                        obs['ITPRICE'], i + 1, obs, line))
+                    if obs['ITCODE'] == '30002':
+                        obs['ITMANUAL'] = '1'
+                    else:
+                        obs['ITMANUAL'] = '?'
+                elif diff >= 0.02:
+                    add_obs = obs.copy()
+                    add_obs['ITCODE'] += 'X'
+                    add_obs['ITPRICE'] = 0.
+                    add_obs['NEG'] = 1 if diff < 0 else 0
+                    add_obs['ITUNIT'] = abs(diff)
+                    add_obs['ITQU'] = 1
+                    add_obs['PIECE'] = True
+                    add_obs['CAT'] = 1
             record['data'].append(obs)  # pylint: disable=E1136
+            if add_obs:
+                record['data'].append(add_obs)  # pylint: disable=E1136
 
         elif line.startswith('T\x1d9\x1d'):
             # items

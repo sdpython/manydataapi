@@ -7,7 +7,7 @@ import re
 import os
 
 
-def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$"):
+def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$", verbose=False):
     """
     Applies the same parser on many files in a folder.
 
@@ -15,6 +15,7 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$"):
     @param      reader      reader name or function which processes a string or a filename,
                             possible read name: `CT1`.
     @param      pattern     file pattern
+    @param      verbose     to show progress, it requires module :epkg:`tqdm`
     @return                 concatenated list or DataFrame
     """
     if isinstance(reader, str):
@@ -36,7 +37,14 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$"):
         raise FileNotFoundError(
             "Unable to find file in '{}' following pattern '{}'.".format(folder, pattern))
     objs = []
-    for name in names:
+
+    if verbose:
+        from tqdm import tqdm
+        loop = tqdm(names)
+    else:
+        loop = iter(names)
+
+    for name in loop:
         try:
             obj = reader(os.path.join(folder, name))
         except (ValueError, KeyError) as e:
@@ -51,6 +59,6 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$"):
     else:
         from pandas import DataFrame, concat
         if isinstance(objs[0], DataFrame):
-            return concat(objs)
+            return concat(objs, sort=False)
         else:
             raise TypeError("Unable to merge type {}.".format(type(objs[0])))

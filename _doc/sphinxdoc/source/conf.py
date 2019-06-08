@@ -19,5 +19,6 @@ epkg_dictionary.update({
     "linkedin": 'https://www.linkedin.com/',
     "LinkedIn": 'https://www.linkedin.com/',
     'moviepy': 'https://zulko.github.io/moviepy/',
+    'tqdm': 'https://github.com/tqdm/tqdm',
     "velib": 'https://www.velib-metropole.fr/',
 })
