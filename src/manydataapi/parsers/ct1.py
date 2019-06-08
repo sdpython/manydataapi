@@ -34,7 +34,8 @@ def dummy_ct1():
 def read_ct1(file_or_str, encoding='ascii', as_df=True):
     """
     Parses a file or a string which follows a specific
-    format. See function @see fn dummy_ct1.
+    format called `CT1`.
+    See function @see fn dummy_ct1 for an example.
 
     @param      file_or_str     file or string
     @param      encoding        encoding

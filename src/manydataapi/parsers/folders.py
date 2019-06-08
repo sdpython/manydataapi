@@ -5,9 +5,11 @@
 """
 import re
 import os
+from .dataframe_helper import dataframe_to
 
 
-def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$", verbose=False):
+def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
+                verbose=False, out=None):
     """
     Applies the same parser on many files in a folder.
 
@@ -16,7 +18,14 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$", verbose=False)
                             possible read name: `CT1`.
     @param      pattern     file pattern
     @param      verbose     to show progress, it requires module :epkg:`tqdm`
+    @param      out         output the dataframe in a file
     @return                 concatenated list or DataFrame
+
+    The function is also available through a command line.
+
+   .. cmdref::
+        :title: Parses and merges files in a dictionary with format CT1
+        :cmd: -m manydataapi read_folder --help
     """
     if isinstance(reader, str):
         if reader.lower() == 'ct1':
@@ -59,6 +68,9 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$", verbose=False)
     else:
         from pandas import DataFrame, concat
         if isinstance(objs[0], DataFrame):
-            return concat(objs, sort=False)
+            df = concat(objs, sort=False)
+            if out is not None:
+                dataframe_to(df, out)
+            return df
         else:
             raise TypeError("Unable to merge type {}.".format(type(objs[0])))

@@ -6,4 +6,5 @@ API
     :maxdepth: 2
 
     linkedin
+    parsers
     velib
