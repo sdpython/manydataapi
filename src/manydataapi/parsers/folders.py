@@ -9,7 +9,7 @@ from .dataframe_helper import dataframe_to
 
 
 def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
-                verbose=False, out=None):
+                verbose=False, out=None, fLOG=None):
     """
     Applies the same parser on many files in a folder.
 
@@ -19,6 +19,7 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
     @param      pattern     file pattern
     @param      verbose     to show progress, it requires module :epkg:`tqdm`
     @param      out         output the dataframe in a file
+    @param      fLOG        logging function
     @return                 concatenated list or DataFrame
 
     The function is also available through a command line.
@@ -37,6 +38,8 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
         else:
             raise ValueError("Unknown parser '{}'.".format(reader))
 
+    if verbose and fLOG:
+        fLOG("look into '%s'." % folder)
     names = []
     pat = re.compile(pattern)
     for name in os.listdir(folder):
@@ -71,6 +74,8 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
             df = concat(objs, sort=False)
             if out is not None:
                 dataframe_to(df, out)
+                if verbose and fLOG:
+                    fLOG("wrote '%s'." % out)
             return df
         else:
             raise TypeError("Unable to merge type {}.".format(type(objs[0])))

@@ -17,6 +17,8 @@ def dataframe_to(df, out, **kwargs):
     """
     if isinstance(out, str):
         ext = os.path.splitext(out)[-1][1:]
+        if ext == 'xlsx':
+            ext = 'excel'
         meth = "to_" + ext
         if hasattr(df, meth):
             m = getattr(df, meth)
