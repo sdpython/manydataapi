@@ -47,15 +47,13 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
 
     def _post_process(rec):
         total = sum(obs['ITPRICE'] for obs in rec['data'])
-        if abs(total - rec['TOTAL']) > 0.01:
-            raise ValueError('Unexected total {} != {}\n{}'.format(
-                rec['TOTAL'], total, pprint.pformat(rec)))
-        if record['TOTAL-'] != rec['TOTAL']:
-            raise ValueError("Mismatch total' {} != {}\n{}".format(
-                rec['TOTAL'], record['TOTAL-'], pprint.pformat(record)))
-        if record['TOTAL_'] != rec['TOTAL']:
-            raise ValueError("Mismatch total' {} != {}\n{}".format(
-                rec['TOTAL'], record['TOTAL_'], pprint.pformat(record)))
+        rec['TOTAL'] = total
+        if abs(record['TOTAL-'] - rec['TOTAL']) >= 0.01:
+            raise ValueError("Mismatch total' {} != {}".format(
+                rec['TOTAL'], record['TOTAL-']))
+        if abs(record['TOTAL_'] - rec['TOTAL']) >= 0.01:
+            raise ValueError("Mismatch total' {} != {}".format(
+                rec['TOTAL'], record['TOTAL_']))
         del record['TOTAL_']
         del record['TOTAL-']
         tva_d = {t['TVAID']: t for t in record['tva']}
@@ -63,10 +61,14 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             tvaid = item['TVAID']
             item['TVARATE'] = tva_d[tvaid]['RATE']
             item['TVA'] = tva_d[tvaid]['VALUE']
+        if len(record["data"]) == 0:
+            raise ValueError("No record.")
 
     records = []
     record = None
-    for i, line in enumerate(content.split('\n')):
+    first_line = None
+    content_ = content.split('\n')
+    for i, line in enumerate(content_):
         line = line.strip('\r')
         if line.startswith("\x02"):
             if record is not None:
@@ -75,13 +77,26 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             spl = line[1:].split("\x1d")
             for ii, info in enumerate(spl):
                 record['INFO%d' % ii] = info
+            first_line = i
 
         elif line.startswith('\x04'):
             if record is None:
                 raise RuntimeError("Wrong format at line {}".format(i + 1))
             line = line.strip("\x04\x05")
             record['INFO_'] = line  # pylint: disable=E1137
-            records.append(record)  # pylint: disable=E1137
+
+            # verification
+            if len(record['data']) > 0:  # pylint: disable=E1136
+                try:
+                    _post_process(record)
+                except (KeyError, ValueError) as e:
+                    raise ValueError("Unable to process one record line {}-{}\n{}\n-\n{}".format(
+                        first_line + 1, i + 1, pprint.pformat(record),
+                        "\n".join(content_[first_line: i + 1]))) from e
+
+                records.append(record)  # pylint: disable=E1137
+
+            first_line = None
             record = None
 
         elif line.startswith('H\x1d'):
@@ -102,39 +117,35 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             line = line[2:]
             spl = line.split("\x1d")
             names = ['ITCODE', 'ITNAME', 'IT1', 'IT2', 'TVAID', 'IT4',
-                     'ITUNIT', 'ITQU', 'IT5', 'ITPRICE',
-                     'IT6', 'IT7', 'IT8', 'IT9', 'IT10', 'IT11', 'IT12']
+                     'ITUNIT', 'ITQU', 'CAT', 'ITPRICE',
+                     'IT6', 'NEG', 'IT8', 'IT9', 'IT10', 'IT11', 'IT12']
             obs = {}
             for n, v in zip(names, spl):
-                if n in ['ITUNIT', 'ITQU', 'ITPRICE']:
-                    obs[n] = float(v)
+                if n in ['ITUNIT', 'ITQU', 'ITPRICE', 'NEG', 'CAT']:
+                    obs[n] = float(v.replace(" ", ""))
                 else:
                     obs[n] = v
             n = 'ITQU'
-            if obs[n] < 0.01 and int(obs[n] * 1000) == obs[n] * 1000:
+            if obs['CAT'] == 2:
                 obs['PIECE'] = True
                 obs[n] = int(obs[n] * 1000)
             else:
                 obs['PIECE'] = False
+            if obs['NEG']:
+                obs['ITUNIT'] *= -1
+                obs['ITPRICE'] *= -1
             diff = abs(obs['ITQU'] * obs['ITUNIT'] - obs['ITPRICE'])
             if diff >= 0.01:  # 1 cent
-                raise ValueError("{} * {} = {} != {} at line {}\n{}\n{}".format(
-                    obs['ITQU'], obs['ITUNIT'], obs['ITQU'] * obs['ITUNIT'],
-                    obs['ITPRICE'], i + 1, obs, line))
+                obs['ERROR'] = diff
+                if obs['ITQU'] == 0 and obs['ITUNIT'] == 0:
+                    obs['ERROR'] = 0.
+                    obs['WHY'] = True
+                    obs['ITPRICE'] = 0.
+                elif diff >= 0.1:
+                    raise ValueError("{} * {} = {} != {} at line {}\n{}\n{}".format(
+                        obs['ITQU'], obs['ITUNIT'], obs['ITQU'] * obs['ITUNIT'],
+                        obs['ITPRICE'], i + 1, obs, line))
             record['data'].append(obs)  # pylint: disable=E1136
-
-        elif line.startswith('P\x1d'):
-            # items
-            if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
-            line = line[2:]
-            spl = line.split("\x1d")
-            names = ['P0', 'TOTAL', 'P2']
-            for n, v in zip(names, spl):
-                if n in ['TOTAL']:
-                    record[n] = float(v)  # pylint: disable=E1137
-                else:
-                    record[n] = v  # pylint: disable=E1137
 
         elif line.startswith('T\x1d9\x1d'):
             # items
@@ -145,7 +156,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             names = ['HT', 'TVA', 'TOTAL_']
             tva = {}
             for n, v in zip(names, spl):
-                record[n] = float(v)  # pylint: disable=E1137
+                record[n] = float(v.replace(" ", ""))  # pylint: disable=E1137
 
         elif line.startswith('T\x1d'):
             # items
@@ -160,7 +171,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                     tva[n] = v
                 else:
                     try:
-                        tva[n] = float(v)
+                        tva[n] = float(v.replace(" ", ""))
                     except ValueError:
                         tva[n] = v
             record['tva'].append(tva)  # pylint: disable=E1136
@@ -172,9 +183,12 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             line = line[2:]
             spl = line.split("\x1d")
             names = ['FCODE', 'TOTAL-', 'DATE', 'TIME', 'FCODE1', 'FCODE2']
+            vtime = None
+            vdate = None
             for n, v in zip(names, spl):
                 if n in {'TOTAL-', }:
-                    record[n] = float(v)  # pylint: disable=E1137
+                    record[n] = float(v.replace(" ", "")  # pylint: disable=E1137
+                                      )  # pylint: disable=E1137
                 elif n == "TIME":
                     vtime = v
                 elif n == "DATE":
@@ -183,10 +197,6 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                     record[n] = v  # pylint: disable=E1137
             record["DATETIME"] = datetime.datetime.strptime(  # pylint: disable=E1137
                 "{} {}".format(vdate, vtime), "%d.%m.%Y %H:%M:%S")
-
-    # verification
-    for record in records:
-        _post_process(record)
 
     if as_df:
         new_records = []

@@ -39,7 +39,7 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$"):
     for name in names:
         try:
             obj = reader(os.path.join(folder, name))
-        except ValueError as e:
+        except (ValueError, KeyError) as e:
             raise ValueError("Unable to parse file '{}'.".format(name)) from e
         objs.append(obj)
 
