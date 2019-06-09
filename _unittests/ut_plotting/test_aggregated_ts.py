@@ -1,5 +1,5 @@
 """
-@brief      test log(time=13s)
+@brief      test log(time=3s)
 """
 import unittest
 from pyquickhelper.pycode import ExtTestCase
@@ -53,6 +53,24 @@ class TestAggregatedTs(ExtTestCase):
         from matplotlib import pyplot as plt
         _, ax = plt.subplots(1, 1)
         plot_aggregated_ts(df, ax=ax, value='ITPRICE', agg='weekday')
+        plt.close('all')
+
+    def test_agg_hour(self):
+        dummy = dummy_ct1()
+        df = read_ct1(dummy, as_df=True)
+
+        from matplotlib import pyplot as plt
+        _, ax = plt.subplots(1, 1)
+        plot_aggregated_ts(df, ax=ax, value='ITPRICE', agg='hour')
+        plt.close('all')
+
+    def test_agg_week_hours(self):
+        dummy = dummy_ct1()
+        df = read_ct1(dummy, as_df=True)
+
+        from matplotlib import pyplot as plt
+        _, ax = plt.subplots(1, 1)
+        plot_aggregated_ts(df, ax=ax, value='ITPRICE', agg='weekhour')
         plt.close('all')
 
 
