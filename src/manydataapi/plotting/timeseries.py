@@ -31,7 +31,8 @@ def get_new_column(df, name):
     return name
 
 
-def plot_aggregated_ts(df, value, date=None, agg="month", ax=None):
+def plot_aggregated_ts(df, value, date=None, agg="month", ax=None,
+                       kind='bar', **kwargs):
     """
     Plots a, aggregated time series by a period of time.
 
@@ -41,8 +42,18 @@ def plot_aggregated_ts(df, value, date=None, agg="month", ax=None):
                         if None, it assume there is one and only one
     @param      agg     aggregation by ``'month'``, ``'day'``,
                         ``'year'``, ``'weekday'``
+    @param      kind    graph style
     @param      ax      existing ax
+    @param      kwargs  additional parameter for the graph
     @return             ax
+
+    .. plot::
+
+        import matplotlib.pyplot as plt
+        from manaydataapi.timeseries import plot_aggregated_ts, daily_timeseries
+        df = plot_aggregated_ts()
+        plot_aggregated_ts(df, value='X', agg='month')
+        plt.show()
     """
     if not ax:
         import matplotlib.pyplot as plt
@@ -75,5 +86,5 @@ def plot_aggregated_ts(df, value, date=None, agg="month", ax=None):
     else:
         raise ValueError("Unknown aggregation '{}'.".format(agg))
     gr = df.groupby(key).sum()
-    gr.plot(kind="bar", ax=ax)
+    gr.plot(kind=kind, ax=ax, **kwargs)
     return ax
