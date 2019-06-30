@@ -2,7 +2,7 @@
 import sys
 import os
 import sphinx_readable_theme
-from pyquickhelper.helpgen.default_conf import set_sphinx_variables
+from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default_stylesheet
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
 
@@ -13,6 +13,10 @@ set_sphinx_variables(__file__, "manydataapi", "Xavier Dupré", 2019,
 
 blog_root = "http://www.xavierdupre.fr/app/manydataapi/helpsphinx/"
 blog_background = False
+
+html_context = {
+    'css_files': get_default_stylesheet() + ['_static/my-styles.css'],
+}
 
 epkg_dictionary.update({
     "JCDecaux": 'http://www.jcdecaux.com/fr/pour-nos-partenaires/velos-en-libre-service',
