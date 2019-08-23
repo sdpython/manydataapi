@@ -1,4 +1,12 @@
 
+.. image:: https://github.com/sdpython/manydataapi/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+    :target: https://github.com/sdpython/manydataapi/
+
+.. _l-README:
+
+manydataapi: access some data through API
+=========================================
+
 .. image:: https://travis-ci.org/sdpython/manydataapi.svg?branch=master
     :target: https://travis-ci.org/sdpython/manydataapi
     :alt: Build status
@@ -31,11 +39,6 @@
 .. image:: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/_images/nbcov.png
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
-
-.. _l-README:
-
-manydataapi
-===========
 
 Pieces of code to access various (REST) API or to parse
 weird formats. It is difficult to test code built on top of API as it usually

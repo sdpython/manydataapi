@@ -1,5 +1,8 @@
-manydataapi documentation
-=========================
+.. image:: https://github.com/sdpython/manydataapi/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+    :target: https://github.com/sdpython/manydataapi/
+
+manydataapi: access some data through API
+=========================================
 
 .. image:: https://travis-ci.org/sdpython/manydataapi.svg?branch=master
     :target: https://travis-ci.org/sdpython/manydataapi
