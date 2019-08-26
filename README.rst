@@ -40,6 +40,18 @@ manydataapi: access some data through API
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://pepy.tech/badge/manydataapi/month
+    :target: https://pepy.tech/project/manydataapi/month
+    :alt: Downloads
+
+.. image:: https://img.shields.io/github/forks/sdpython/manydataapi.svg
+    :target: https://github.com/sdpython/manydataapi/
+    :alt: Forks
+
+.. image:: https://img.shields.io/github/stars/sdpython/manydataapi.svg
+    :target: https://github.com/sdpython/manydataapi/
+    :alt: Stars
+
 Pieces of code to access various (REST) API or to parse
 weird formats. It is difficult to test code built on top of API as it usually
 requires authentification. It is easier to put everything in one place.
