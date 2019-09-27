@@ -15,7 +15,7 @@ class TestCodeStyle(ExtTestCase):
         src_ = os.path.normpath(os.path.join(thi, "..", "..", "src"))
         check_pep8(src_, fLOG=fLOG,
                    pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
-                                  'R1702', 'W0212', 'W0201'),
+                                  'R1702', 'W0212', 'W0201', 'C0415'),
                    skip=["Class 'DataCollectJCDecaux' has no 'velib_get_key'",
                          "Redefining built-in 'iter'",
                          "data_jcdecaux.py:597: W0612",
@@ -40,7 +40,7 @@ class TestCodeStyle(ExtTestCase):
         test = os.path.normpath(os.path.join(thi, "..", ))
         check_pep8(test, fLOG=fLOG, neg_pattern="temp_.*",
                    pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
-                                  'C0111', 'W0703'),
+                                  'C0111', 'W0703', 'C0415'),
                    skip=["Redefining built-in 'iter'",
                          ])
 

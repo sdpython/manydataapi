@@ -117,7 +117,7 @@ class LinkedInAccess:
         @param      all_permissions         True to get all permissions, otherwise, only public profiles
         @return                             client
         """
-        from linkedin_v2 import linkedin
+        from linkedin_v2 import linkedin  # pylint: disable=E0401
         # permissions = linkedin.PERMISSIONS.enums.values() if all_permissions \
         #     else linkedin.PERMISSIONS.BASIC_PROFILE
         self.authentication = linkedin.LinkedInDeveloperAuthentication(
@@ -199,7 +199,7 @@ class LinkedInAccess:
             for _ in se["people"]["values"] :
                 print(_)
         """
-        from linkedin_v2.exceptions import LinkedInError
+        from linkedin_v2.exceptions import LinkedInError  # pylint: disable=E0401
 
         if selectors is None and self.all_permissions:
             selectors = LinkedInAccess.default_selectors_search_profile

@@ -31,7 +31,7 @@ class TestLinkedIn(unittest.TestCase):
     my_id = "9nsW-6OsQF"
 
     def start(self):
-        import linkedin_v2 as mod
+        import linkedin_v2 as mod  # pylint: disable=E0401
         self.assertFalse(mod is None)
 
     def get_access_token(self):
