@@ -219,7 +219,7 @@ class DataCollectJCDecaux:
         Runs the collection of the data for velib, data are stored using :epkg:`json` format.
         The function creates a file every time a new status is downloaded.
 
-        @param      key             (str|None) if None, the function calls function see @see me velib_get_key
+        @param      key             (str|None), not implemented if None
         @param      contract        a city
         @param      delayms         gets a status every delayms milliseconds
         @param      folder_file     prefix used to create one file or several, it depends on single_file) where to place downloaded files)
@@ -243,7 +243,7 @@ class DataCollectJCDecaux:
                             log_every=1)
         """
         if key is None:
-            key = DataCollectJCDecaux.velib_get_key()
+            raise NotImplementedError("key cannot be None")
         velib = DataCollectJCDecaux(key, True)
         velib.collecting_data(contract, delayms, folder_file, stop_datetime=stop_datetime,
                               single_file=single_file, log_every=log_every, fLOG=fLOG)
