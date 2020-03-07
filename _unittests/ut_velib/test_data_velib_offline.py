@@ -8,11 +8,11 @@ import os
 import unittest
 import datetime
 from pyquickhelper.loghelper import fLOG
-from pyquickhelper.pycode import get_temp_folder
+from pyquickhelper.pycode import get_temp_folder, ExtTestCase
 from manydataapi.velib import DataCollectJCDecaux
 
 
-class TestDataVelibOffline(unittest.TestCase):
+class TestDataVelibOffline(ExtTestCase):
 
     def test_data_velib_contract(self):
         fLOG(
@@ -25,12 +25,12 @@ class TestDataVelibOffline(unittest.TestCase):
 
         df = DataCollectJCDecaux.to_df(data)
         # fLOG(df.head())
-        assert len(df) > 0
+        self.assertGreater(df.shape[0], 1)
 
         stations = df[["name", "lat", "lng"]]
         gr = stations.groupby(["name", "lat", "lng"], as_index=False).sum()
         # fLOG(gr.head())
-        assert len(gr) >= 30
+        self.assertGreater(len(gr), 30)
 
         df.to_csv(os.path.join(fold, "out_data.txt"), sep="\t", index=False)
         dt = datetime.datetime(2014, 5, 22, 11, 49, 27, 523164)

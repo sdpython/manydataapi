@@ -399,9 +399,9 @@ class DataCollectJCDecaux:
             sub = df[df["file"] == d]
             x = sub["lng"]
             y = sub["lat"]
-            colp = df.apply(
+            colp = sub.apply(
                 lambda r: r["available_bike_stands"] ** 0.5 * size, axis=1)
-            colb = df.apply(
+            colb = sub.apply(
                 lambda r: r["available_bikes"] ** 0.5 * size, axis=1)
             x = tuple(x)
             y = tuple(y)
