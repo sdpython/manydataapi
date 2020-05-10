@@ -13,14 +13,14 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
     """
     Applies the same parser on many files in a folder.
 
-    @param      folder      folder
-    @param      reader      reader name or function which processes a string or a filename,
-                            possible read name: `CT1`.
-    @param      pattern     file pattern
-    @param      verbose     to show progress, it requires module :epkg:`tqdm`
-    @param      out         output the dataframe in a file
-    @param      fLOG        logging function
-    @return                 concatenated list or DataFrame
+    :param folder: folder
+    :param reader: reader name or function which processes
+        a string or a filename, possible read name: `CT1`.
+    :param pattern: file pattern
+    :param verbose: to show progress, it requires module :epkg:`tqdm`
+    :param out: output the dataframe in a file
+    :param fLOG: logging function
+    :return: concatenated list or DataFrame
 
     The function is also available through a command line.
 
@@ -68,14 +68,12 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
         for obj in objs:
             res.extend(obj)
         return res
-    else:
-        from pandas import DataFrame, concat
-        if isinstance(objs[0], DataFrame):
-            df = concat(objs, sort=False)
-            if out is not None:
-                dataframe_to(df, out)
-                if verbose and fLOG:
-                    fLOG("wrote '%s'." % out)
-            return df
-        else:
-            raise TypeError("Unable to merge type {}.".format(type(objs[0])))
+    from pandas import DataFrame, concat
+    if isinstance(objs[0], DataFrame):
+        df = concat(objs, sort=False)
+        if out is not None:
+            dataframe_to(df, out)
+            if verbose and fLOG:
+                fLOG("wrote '%s'." % out)
+        return df
+    raise TypeError("Unable to merge type {}.".format(type(objs[0])))
