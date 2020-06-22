@@ -11,5 +11,4 @@ pyensae
 pyquickhelper>=1.9
 python-linkedin-v2
 sphinx
-sphinx_readable_theme
 wheel

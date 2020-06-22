@@ -52,6 +52,10 @@ manydataapi: access some data through API
     :target: https://github.com/sdpython/manydataapi/
     :alt: Stars
 
+.. image:: https://img.shields.io/github/repo-size/sdpython/manydataapi
+    :target: https://github.com/sdpython/manydataapi/
+    :alt: size
+
 Pieces of code to access various (REST) API or to parse
 weird formats. It is difficult to test code built on top of API as it usually
 requires authentification. It is easier to put everything in one place.

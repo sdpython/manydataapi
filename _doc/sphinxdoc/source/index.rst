@@ -37,6 +37,10 @@ manydataapi: access some data through API
     :target: http://www.xavierdupre.fr/app/manydataapi/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
+.. image:: https://img.shields.io/github/repo-size/sdpython/manydataapi
+    :target: https://github.com/sdpython/manydataapi/
+    :alt: size
+
 **Links:** `pypi <https://pypi.python.org/pypi/manydataapi/>`_,
 `github <https://github.com/sdpython/manydataapi/>`_,
 `documentation <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/index.html>`_,
