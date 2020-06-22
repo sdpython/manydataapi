@@ -15,4 +15,6 @@ pylint
 pyquickhelper>=1.9
 python-linkedin-v2
 sphinx
+sphinxcontrib.imagesvg
+sphinx_gallery
 wheel
