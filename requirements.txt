@@ -2,6 +2,7 @@ autopep8
 coverage
 folium
 imageio-ffmpeg
+jupyter_sphinx
 jyquickhelper
 keyring
 imageio
