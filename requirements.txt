@@ -1,3 +1,4 @@
+autopep8
 coverage
 folium
 imageio-ffmpeg
@@ -5,9 +6,12 @@ jyquickhelper
 keyring
 imageio
 imageio-ffmpeg
+matplotlib
 moviepy
 openpyxl
+pycodestyle
 pyensae
+pylint
 pyquickhelper>=1.9
 python-linkedin-v2
 sphinx
