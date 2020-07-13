@@ -27,7 +27,7 @@ def dummy_ct1():
     this = os.path.dirname(__file__)
     data = os.path.join(this, "dummies", "DDMMYYXX.map")
     if not os.path.exists(data):
-        raise FileNotFoundError(data)
+        raise FileNotFoundError(data)  # pragma: no cover
     return data
 
 
@@ -77,7 +77,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
     def _post_process(rec):
         manual = [o for o in rec['data'] if o['ITMANUAL'] == '1']
         if len(manual) > 1:
-            raise ValueError("More than one manual item.")
+            raise ValueError(  # pragma: no cover
+                "More than one manual item.")
         is_manual = len(manual) == 1
 
         total = sum(obs['ITPRICE'] for obs in rec['data'])
@@ -96,11 +97,13 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
 
         rec['TOTAL'] = total
         if abs(record['TOTAL-'] - rec['TOTAL']) >= 0.01:
-            raise ValueError("Mismatch total' {} != {}".format(
-                rec['TOTAL'], record['TOTAL-']))
+            raise ValueError(  # pragma: no cover
+                "Mismatch total' {} != {}".format(
+                    rec['TOTAL'], record['TOTAL-']))
         if abs(record['TOTAL_'] - rec['TOTAL']) >= 0.01:
-            raise ValueError("Mismatch total' {} != {}".format(
-                rec['TOTAL'], record['TOTAL_']))
+            raise ValueError(  # pragma: no cover
+                "Mismatch total' {} != {}".format(
+                    rec['TOTAL'], record['TOTAL_']))
         del record['TOTAL_']
         del record['TOTAL-']
         tva_d = {t['TVAID']: t for t in record['tva']}
@@ -117,7 +120,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                 item['TVARATE'] = tva_d[tvaid]['RATE']
                 item['TVA'] = item['ITPRICE'] * item['TVARATE'] / 100
         if len(record["data"]) == 0:
-            raise ValueError("No record.")
+            raise ValueError("No record.")  # pragma: no cover
 
     records = []
     record = None
@@ -127,7 +130,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         line = line.strip('\r')
         if line.startswith("\x02"):
             if record is not None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             record = dict(data=[], tva=[])
             spl = line[1:].split("\x1d")
             for ii, info in enumerate(spl):
@@ -136,7 +140,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
 
         elif line.startswith('\x04'):
             if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             line = line.strip("\x04\x05")
             record['BASKET'] = line  # pylint: disable=E1137
 
@@ -144,7 +149,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
             if len(record['data']) > 0:  # pylint: disable=E1136
                 try:
                     _post_process(record)
-                except (KeyError, ValueError) as e:
+                except (KeyError, ValueError) as e:  # pragma: no cover
                     raise ValueError("Unable to process one record line {}-{}\n{}\n-\n{}".format(
                         first_line + 1, i + 1, pprint.pformat(record),
                         "\n".join(content_[first_line: i + 1]))) from e
@@ -157,7 +162,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         elif line.startswith('H\x1d'):
             # description
             if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             line = line[2:]
             spl = line.split("\x1d")
             names = ['NB1', 'NB2', 'NAME', 'PLACE', 'STREET', 'ZIPCODE',
@@ -168,7 +174,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         elif line.startswith('L\x1d'):
             # items
             if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             line = line[2:]
             spl = line.split("\x1d")
             names = ['ITCODE', 'ITNAME', 'IT1', 'IT2', 'TVAID', 'IT4',
@@ -200,7 +207,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                         obs['ITMANUAL'] = '1'
                     else:
                         obs['ITMANUAL'] = '?'
-                elif diff >= 0.02:
+                elif diff >= 0.02:  # pragma: no cover
                     add_obs = obs.copy()
                     add_obs['ITCODE'] += 'X'
                     add_obs['ITPRICE'] = 0.
@@ -216,7 +223,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         elif line.startswith('T\x1d9\x1d'):
             # items
             if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             line = line[4:]
             spl = line.split("\x1d")
             names = ['HT', 'TVA', 'TOTAL_']
@@ -227,7 +235,8 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
         elif line.startswith('T\x1d'):
             # items
             if record is None:
-                raise RuntimeError("Wrong format at line {}".format(i + 1))
+                raise RuntimeError(  # pragma: no cover
+                    "Wrong format at line {}".format(i + 1))
             line = line[2:]
             spl = line.split("\x1d")
             names = ['TVAID', 'RATE', 'HT', 'VALUE', 'TOTAL']
@@ -238,7 +247,7 @@ def read_ct1(file_or_str, encoding='ascii', as_df=True):
                 else:
                     try:
                         tva[n] = float(v.replace(" ", ""))
-                    except ValueError:
+                    except ValueError:  # pragma: no cover
                         tva[n] = v
             record['tva'].append(tva)  # pylint: disable=E1136
 

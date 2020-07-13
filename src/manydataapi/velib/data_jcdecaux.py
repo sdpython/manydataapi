@@ -76,7 +76,7 @@ class DataCollectJCDecaux:
         try:
             with urllib.request.urlopen(url) as u:
                 js = u.read()
-        except (urllib.error.HTTPError, urllib.error.URLError) as exc:
+        except (urllib.error.HTTPError, urllib.error.URLError) as exc:  # pragma: no cover
             # there was probably a mistake
             # We try again after a given amount of time
             time.sleep(0.5)
@@ -101,7 +101,7 @@ class DataCollectJCDecaux:
         @return                     :epkg:`json` string
         """
         if contract not in self.contracts:
-            raise Exception(
+            raise RuntimeError(  # pragma: no cover
                 "Unable to find contract '{0}' in:\n{1}".format(contract, "\n".join(
                     self.contracts.keys())))
         url = DataCollectJCDecaux._url_api % (contract, self.apiKey)
@@ -109,7 +109,7 @@ class DataCollectJCDecaux:
         try:
             with urllib.request.urlopen(url) as u:
                 js = u.read()
-        except (urllib.error.HTTPError, urllib.error.URLError):
+        except (urllib.error.HTTPError, urllib.error.URLError):  # pragma: no cover
             # there was probably a mistake
             # We try again after a given amount of time
             time.sleep(0.5)
@@ -137,9 +137,9 @@ class DataCollectJCDecaux:
             try:
                 ds = float(o["last_update"])
                 dt = datetime.datetime.fromtimestamp(ds / 1000)
-            except ValueError:
+            except ValueError:  # pragma: no cover
                 dt = datetime.datetime.now()
-            except TypeError:
+            except TypeError:  # pragma: no cover
                 dt = datetime.datetime.now()
             o["last_update"] = dt
 
@@ -148,7 +148,7 @@ class DataCollectJCDecaux:
                     o["position"]["lat"]) if o["position"]["lat"] is not None else None
                 o["lng"] = float(
                     o["position"]["lng"]) if o["position"]["lng"] is not None else None
-            except TypeError as e:
+            except TypeError as e:  # pragma: no cover
                 raise TypeError(
                     "Unable to convert geocode for the following row: %s\n%s" %
                     (str(o), str(e)))
@@ -243,7 +243,8 @@ class DataCollectJCDecaux:
                             log_every=1)
         """
         if key is None:
-            raise NotImplementedError("key cannot be None")
+            raise NotImplementedError(  # pragma: no cover
+                "key cannot be None")
         velib = DataCollectJCDecaux(key, True)
         velib.collecting_data(contract, delayms, folder_file, stop_datetime=stop_datetime,
                               single_file=single_file, log_every=log_every, fLOG=fLOG)
@@ -286,7 +287,7 @@ class DataCollectJCDecaux:
         files = [_ for _ in files_ if reg.search(_)]
 
         if len(files) == 0:
-            raise FileNotFoundError(
+            raise FileNotFoundError(  # pragma: no cover
                 "No found files in directory: '{}'\nregex: '{}'.".format(
                     folder, regex))
 
@@ -298,8 +299,8 @@ class DataCollectJCDecaux:
             for i, line in enumerate(lines):
                 dl = eval(line.strip("\n\r\t "))  # pylint: disable=W0123
                 if not isinstance(dl, list):
-                    raise TypeError(
-                        "we expect a list for line {0} in file {1}".format(
+                    raise TypeError(  # pragma: no cover
+                        "Expects a list for line {0} in file {1}".format(
                             i,
                             file))
                 for d in dl:
@@ -464,7 +465,8 @@ class DataCollectJCDecaux:
             animation = mpy.VideoClip(make_frame_mpl, duration=duration)
             return animation
         else:
-            raise ValueError("Unsupported module '{0}'".format(module))
+            raise ValueError(  # pragma: no cover
+                "Unsupported module '{0}'".format(module))
 
     @staticmethod
     def distance_haversine(lat1, lon1, lat2, lon2):
@@ -534,7 +536,7 @@ class DataCollectJCDecaux:
                     v[i] = -1
                     fLOG("    pop", v)
                     return r
-            raise Exception("no free bike")
+            raise RuntimeError("no free bike")  # pragma: no cover
 
         def push(v, idv):
             "push"
@@ -543,7 +545,7 @@ class DataCollectJCDecaux:
                     v[i] = idv
                     fLOG("    push", v)
                     return None
-            raise Exception("no free spot: " + str(v))
+            raise RuntimeError("no free spot: " + str(v))  # pragma: no cover
 
         def give_status(conf, ti):
             "give status"

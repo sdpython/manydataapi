@@ -36,7 +36,8 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
                 return read_ct1(name, as_df=True)
             reader = reader_
         else:
-            raise ValueError("Unknown parser '{}'.".format(reader))
+            raise ValueError(  # pragma: no cover
+                "Unknown parser '{}'.".format(reader))
 
     if verbose and fLOG:
         fLOG("look into '%s'." % folder)
@@ -46,20 +47,21 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
         if pat.search(name):
             names.append(name)
     if len(names) == 0:
-        raise FileNotFoundError(
-            "Unable to find file in '{}' following pattern '{}'.".format(folder, pattern))
+        raise FileNotFoundError(  # pragma: no cover
+            "Unable to find file in '{}' following pattern '{}'.".format(
+                folder, pattern))
     objs = []
 
     if verbose:
-        from tqdm import tqdm
-        loop = tqdm(names)
+        from tqdm import tqdm  # pragma: no cover
+        loop = tqdm(names)  # pragma: no cover
     else:
         loop = iter(names)
 
     for name in loop:
         try:
             obj = reader(os.path.join(folder, name))
-        except (ValueError, KeyError) as e:
+        except (ValueError, KeyError) as e:  # pragma: no cover
             raise ValueError("Unable to parse file '{}'.".format(name)) from e
         objs.append(obj)
 
@@ -76,4 +78,5 @@ def read_folder(folder=".", reader="CT1", pattern=".*[.].{1,3}$",
             if verbose and fLOG:
                 fLOG("wrote '%s'." % out)
         return df
-    raise TypeError("Unable to merge type {}.".format(type(objs[0])))
+    raise TypeError(  # pragma: no cover
+        "Unable to merge type {}.".format(type(objs[0])))

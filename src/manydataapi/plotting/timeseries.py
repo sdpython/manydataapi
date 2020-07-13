@@ -15,8 +15,9 @@ def get_index_date(df):
     """
     df = df.select_dtypes(include=[numpy.datetime64])
     if df.shape[1] != 1:
-        raise RuntimeError("Unable to find a single column date in {}.".format(
-            list(zip(df.columns, df.dtypes))))
+        raise RuntimeError(  # pragma: no cover
+            "Unable to find a single column date in {}.".format(
+                list(zip(df.columns, df.dtypes))))
     return df.columns[0]
 
 
@@ -57,8 +58,8 @@ def plot_aggregated_ts(df, value, date=None, agg="month", ax=None,
         plt.show()
     """
     if not ax:
-        import matplotlib.pyplot as plt
-        ax = plt.gca()
+        import matplotlib.pyplot as plt  # pragma: no cover
+        ax = plt.gca()  # pragma: no cover
     if date is None:
         date = get_index_date(df)
     df = df[[date, value]].copy()

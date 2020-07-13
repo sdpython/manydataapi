@@ -15,7 +15,7 @@ def main(args, fLOG=print):
     """
     try:
         from .parsers.folders import read_folder
-    except ImportError:
+    except ImportError:  # pragma: no cover
         from manydataapi.parsers.folders import read_folder
 
     fcts = dict(read_folder=read_folder)
@@ -24,4 +24,4 @@ def main(args, fLOG=print):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(sys.argv[1:])  # pragma: no cover
