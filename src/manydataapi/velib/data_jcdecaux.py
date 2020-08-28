@@ -149,7 +149,7 @@ class DataCollectJCDecaux:
                 o["lng"] = float(
                     o["position"]["lng"]) if o["position"]["lng"] is not None else None
             except TypeError as e:  # pragma: no cover
-                raise TypeError(
+                raise TypeError(  # pylint: disable=W0707
                     "Unable to convert geocode for the following row: %s\n%s" %
                     (str(o), str(e)))
 
