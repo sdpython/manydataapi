@@ -9,6 +9,7 @@ imageio
 imageio-ffmpeg
 matplotlib
 moviepy
+nbconvert>=6.0.2
 openpyxl
 pycodestyle
 pyensae
