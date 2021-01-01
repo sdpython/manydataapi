@@ -20,7 +20,7 @@ class TestCli(ExtTestCase):
         st = BufferedPrint()
         main(args=["read_folder", "--help"], fLOG=st.fprint)
         res = str(st)
-        self.assertIn("read_folder [-h] [-f FOLDER]", res)
+        self.assertIn("usage: read_folder", res)
 
         st = BufferedPrint()
         fold = os.path.dirname(dummy_ct1())
