@@ -16,8 +16,8 @@ install:
 
 script:
   - { CMD: "$PYINT -u setup.py unittests -g \".*((linkedin)|(velib)).*\"", NAME: "UT" }
-  - { CMD: "$PYINT -u setup.py unittests -e \".*linkedin.*\"", NAME: "UT_LINKEDIN" }
-  - { CMD: "$PYINT -u setup.py unittests -e \".*velib.*\"", NAME: "UT_VELIB" }
+  - { CMD: "$PYINT -u setup.py unittests -e \".*linkedin.*\"", NAME: "UT_LINKEDIN", SCHEDULER: "H H(1-2) 21 * *" }
+  - { CMD: "$PYINT -u setup.py unittests -e \".*velib.*\"", NAME: "UT_VELIB", SCHEDULER: "H H(1-2) 21 * *" }
 
 after_script:
   - $PYINT -u setup.py bdist_wheel
