@@ -15,7 +15,7 @@ blog_root = "http://www.xavierdupre.fr/app/manydataapi/helpsphinx/"
 blog_background = False
 
 html_context = {
-    'css_files': get_default_stylesheet() + ['_static/my-styles.css'],
+    'css_files': get_default_stylesheet(['_static/my-styles.css']),
 }
 
 epkg_dictionary.update({
