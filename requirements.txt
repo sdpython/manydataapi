@@ -14,7 +14,8 @@ openpyxl
 pycodestyle
 pyensae
 pylint
-pyquickhelper>=1.9
+pyquickhelper>=1.10
+pyquicksetup
 python-linkedin-v2
 sphinx
 sphinxcontrib.imagesvg

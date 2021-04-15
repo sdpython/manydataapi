@@ -15,14 +15,14 @@ install:
   - $PYINT -m pip freeze
 
 script:
-  - { CMD: "$PYINT -u setup.py unittests -g \".*((linkedin)|(velib)).*\"", NAME: "UT" }
+  - { CMD: "$PYINT -u setup.py unittests -g \".*((linkedin)|(velib)).*\"  --covtoken=3fe1e5e4-ba40-4543-bb20-96642df3d000", NAME: "UT" }
   - { CMD: "$PYINT -u setup.py unittests -e \".*linkedin.*\"", NAME: "UT_LINKEDIN", SCHEDULER: "H H(1-2) 21 * *" }
   - { CMD: "$PYINT -u setup.py unittests -e \".*velib.*\"", NAME: "UT_VELIB", SCHEDULER: "H H(1-2) 21 * *" }
 
 after_script:
   - $PYINT -u setup.py bdist_wheel
-  - if [ ${VERSION} == "3.9" and ${DIST} != "conda" and ${NAME} == "UT" ] then cp dist/*.whl {{root_path}}/../local_pypi/local_pypi_server fi
+  - if [ ${VERSION} == "3.9" and ${NAME} == "UT" ] then cp dist/*.whl {{root_path}}/../local_pypi/local_pypi_server fi
 
 documentation:
-  - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx fi
+  - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx --layout=html fi
   - if [ ${NAME} == "UT" ] then cp -R -f _doc/sphinxdoc/build/html dist/html fi
