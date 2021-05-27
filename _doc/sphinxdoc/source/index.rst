@@ -4,8 +4,8 @@
 manydataapi: access some data through API
 =========================================
 
-.. image:: https://travis-ci.org/sdpython/manydataapi.svg?branch=master
-    :target: https://travis-ci.org/sdpython/manydataapi
+.. image:: https://travis-ci.com/sdpython/manydataapi.svg?branch=master
+    :target: https://travis-ci.com/sdpython/manydataapi
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/hbi3d7kl4gde07o0?svg=true
@@ -45,7 +45,7 @@ manydataapi: access some data through API
 `github <https://github.com/sdpython/manydataapi/>`_,
 `documentation <http://www.xavierdupre.fr/app/manydataapi/helpsphinx/index.html>`_,
 `wheel <http://www.xavierdupre.fr/site2013/index_code.html#manydataapi>`_,
-`travis <https://travis-ci.org/sdpython/manydataapi>`_,
+`travis <https://travis-ci.com/sdpython/manydataapi>`_,
 :ref:`l-README`,
 :ref:`blog <ap-main-0>`,
 :ref:`l-issues-todolist`
