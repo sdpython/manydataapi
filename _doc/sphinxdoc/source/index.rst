@@ -26,10 +26,6 @@ manydataapi: access some data through API
     :alt: MIT License
     :target: http://opensource.org/licenses/MIT
 
-.. image:: https://requires.io/github/sdpython/manydataapi/requirements.svg?branch=master
-     :target: https://requires.io/github/sdpython/manydataapi/requirements/?branch=master
-     :alt: Requirements Status
-
 .. image:: https://codecov.io/github/sdpython/manydataapi/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/manydataapi?branch=master
 
