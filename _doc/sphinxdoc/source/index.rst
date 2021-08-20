@@ -5,7 +5,7 @@ manydataapi: access some data through API
 =========================================
 
 .. image:: https://travis-ci.com/sdpython/manydataapi.svg?branch=master
-    :target: https://travis-ci.com/sdpython/manydataapi
+    :target: https://app.travis-ci.com/github/sdpython/manydataapi
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/hbi3d7kl4gde07o0?svg=true
