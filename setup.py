@@ -16,7 +16,7 @@ readme = 'README.rst'
 history = "HISTORY.rst"
 requirements = None
 
-KEYWORDS = project_var_name + ', ENSAE, REST, API'
+KEYWORDS = [project_var_name, 'datasets', 'Xavier Dupré']
 DESCRIPTION = """Pieces of code to access various API, most for teaching purposes."""
 CLASSIFIERS = [
     'Programming Language :: Python :: %d' % sys.version_info[0],
