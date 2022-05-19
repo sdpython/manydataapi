@@ -83,10 +83,9 @@ class DataCollectJCDecaux:
             try:
                 with urllib.request.urlopen(url) as u:
                     js = u.read()
-            except (urllib.error.HTTPError, urllib.error.URLError) as exc:
-                # there was probably a mistake
-                # we stop
-                raise Exception("unable to access url: " + url) from exc
+            except (urllib.error.HTTPError, urllib.error.URLError) as exc2:
+                # there was probably a mistake, we stop
+                raise RuntimeError("Unable to access url %r." % url) from exc2
 
         js = str(js, encoding="utf8")
         js = json.loads(js)
