@@ -76,7 +76,7 @@ class DataCollectJCDecaux:
         try:
             with urllib.request.urlopen(url) as u:
                 js = u.read()
-        except (urllib.error.HTTPError, urllib.error.URLError) as exc:  # pragma: no cover
+        except (urllib.error.HTTPError, urllib.error.URLError):  # pragma: no cover
             # there was probably a mistake
             # We try again after a given amount of time
             time.sleep(0.5)
