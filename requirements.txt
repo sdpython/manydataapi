@@ -13,7 +13,7 @@ nbconvert>=6.0.2
 openpyxl
 pycodestyle
 pyensae
-pylint
+pylint>=2.14.0
 pyquickhelper>=1.10
 pyquicksetup
 python-linkedin-v2
