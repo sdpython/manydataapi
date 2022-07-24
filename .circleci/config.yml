@@ -15,6 +15,11 @@ jobs:
           - v2-dependencies-
 
       - run:
+          name: Install graphviz
+          command: |
+                    sudo apt-get install -y graphviz
+          
+      - run:
           name: Install java
           command: |
                     sudo apt-get install default-jdk
@@ -35,11 +40,6 @@ jobs:
           name: Install InkScape
           command: |
                     sudo apt-get install -y inkscape
-          
-      - run:
-          name: Install graphviz
-          command: |
-                    sudo apt-get install -y graphviz
           
       - run:
           name: Install ffmpeg
