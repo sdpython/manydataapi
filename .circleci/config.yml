@@ -13,38 +13,6 @@ jobs:
           keys:
           - v2-dependencies-{{ checksum "requirements.txt" }}
           - v2-dependencies-
-
-      - run:
-          name: Install graphviz
-          command: |
-                    sudo apt-get install -y graphviz
-          
-      - run:
-          name: Install java
-          command: |
-                    sudo apt-get install default-jdk
-          
-      - run:
-          name: Install tex
-          command: |
-                    sudo apt-get install -y texlive
-                    sudo apt-get install -y texlive-latex-extra
-                    sudo apt-get install -y dvipng
-          
-      - run:
-          name: Install 7z, unrar
-          command: |
-                    sudo apt-get install -y p7zip-full
-          
-      - run:
-          name: Install InkScape
-          command: |
-                    sudo apt-get install -y inkscape
-          
-      - run:
-          name: Install ffmpeg
-          command: |
-                    sudo apt-get install -y ffmpeg
           
       - run:
           name: install dependencies
