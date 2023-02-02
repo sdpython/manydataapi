@@ -1,4 +1,4 @@
-.. image:: https://github.com/sdpython/manydataapi/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+.. image:: https://github.com/sdpython/manydataapi/blob/master/_doc/sphinxdoc/source/_static/project_ico.png?raw=true
     :target: https://github.com/sdpython/manydataapi/
 
 manydataapi: access some data through API
