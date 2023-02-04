@@ -220,7 +220,7 @@ class LinkedInAccess:
                     import pandas
                     return pandas.DataFrame(values)
                 else:
-                    raise Exception(
+                    raise RuntimeError(
                         "expecting a result such as {'people': ...}")
             else:
                 return res
@@ -246,7 +246,7 @@ class LinkedInAccess:
                     total += fetched
                     alls = first.get("_total", 0)
                 else:
-                    raise Exception(
+                    raise RuntimeError(
                         "expecting a result such as {'people': ...} +\n" +
                         str(se))
 

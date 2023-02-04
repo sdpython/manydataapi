@@ -41,7 +41,7 @@ class TestDataJCDecaux(ExtTestCase):
         if d != datetime.datetime(2013, 5, 9, 19, 51, 0):
             # issue with time (not the same local)
             if d.year != 2013 and d.month != 5 and d.day != 9:
-                raise Exception("difference: " + str(d))
+                raise AssertionError("difference: " + str(d))
 
     def test_data_velib_json(self):
         fLOG(
@@ -106,7 +106,7 @@ class TestDataJCDecaux(ExtTestCase):
         with open(temp_file, "r", encoding="utf8") as f:
             lines = f.readlines()
         if len(lines) < 1:
-            raise Exception(
+            raise AssertionError(
                 "len(lines)<1: %d\n%s" %
                 (len(lines), "\n".join(lines)))
         self.assertLesser(len(lines), 10)
@@ -117,7 +117,7 @@ class TestDataJCDecaux(ExtTestCase):
                               single_file=False, log_every=1, fLOG=fLOG)
         res = os.listdir(tempfold)
         if len(res) <= 2:
-            raise Exception(str(res))
+            raise AssertionError(str(res))
 
     def test_data_velib_json_collect_func(self):
         fLOG(
@@ -146,7 +146,7 @@ class TestDataJCDecaux(ExtTestCase):
         with open(temp_file, "r", encoding="utf8") as f:
             lines = f.readlines()
         if len(lines) < 1:
-            raise Exception(
+            raise AssertionError(
                 "len(lines)<1: %d\n%s" %
                 (len(lines), "\n".join(lines)))
         self.assertLesser(len(lines), 10)
@@ -178,7 +178,7 @@ class TestDataJCDecaux(ExtTestCase):
         with open(temp_file, "r", encoding="utf8") as f:
             lines = f.readlines()
         if len(lines) < 1:
-            raise Exception(
+            raise AssertionError(
                 "len(lines)<1: %d\n%s" %
                 (len(lines), "\n".join(lines)))
         self.assertLesser(len(lines), 10)
