@@ -35,7 +35,7 @@ def get_new_column(df, name):
 def plot_aggregated_ts(df, value, date=None, agg="month", ax=None,
                        kind='bar', **kwargs):
     """
-    Plots a, aggregated time series by a period of time.
+    Plots an aggregated time series by a period of time.
 
     @param      df      dataframe
     @param      value   column to show
@@ -104,6 +104,6 @@ def plot_aggregated_ts(df, value, date=None, agg="month", ax=None,
             key = col1
         else:
             raise ValueError("Unknown aggregation '{}'.".format(agg))
-        gr = df.groupby(key).sum()
+        gr = df.drop(date, axis=1).groupby(key).sum()
         gr.plot(kind=kind, ax=ax, **kwargs)
     return ax
