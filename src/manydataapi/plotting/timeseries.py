@@ -71,8 +71,11 @@ def plot_aggregated_ts(df, value, date=None, agg="month", ax=None,
         df[col2] = df[date].dt.hour
         key = [col2, col1]
         vals = [_ for _ in sorted(set(df[col1])) if not numpy.isnan(_)]
+        drop_cols = [col1]
+        if date is not None:
+            drop_cols.append(date)
         for v in vals:
-            gr = df[df[col1] == v].drop(col1, axis=1).groupby(col2).sum()
+            gr = df[df[col1] == v].drop(drop_cols, axis=1).groupby(col2).sum()
             gr.columns = ['wk=%d' % v]
             gr.plot(kind=kind, ax=ax, **kwargs)
     else:
